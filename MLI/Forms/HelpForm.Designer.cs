@@ -1,16 +1,9 @@
-﻿namespace MLI
+﻿namespace MLI.Forms
 {
 	partial class HelpForm
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null))
@@ -50,7 +43,7 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "HelpForm";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Помощь";
 			this.ResumeLayout(false);
 
