@@ -7,7 +7,7 @@ namespace MLI.Forms
 	{
 		private static SettingForm instance;
 
-		public SettingForm()
+		private SettingForm()
 		{
 			InitializeComponent();
 		}
