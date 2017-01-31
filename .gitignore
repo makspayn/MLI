@@ -88,3 +88,8 @@ Temporary Items
 /MLI/obj/Release/MLI.Forms.HelpForm.resources
 /MLI/obj/Release/MLI.Forms.AboutForm.resources
 /MLI/obj/Debug/MLI.Properties.Resources.resources
+MLI/obj/Release/MLI.Forms.ExecUnitsForm.resources
+MLI/obj/Release/MLI.Forms.ProcessesForm.resources
+MLI/obj/Release/MLI.Forms.StatisticsForm.resources
+MLI/obj/Release/MLI.Forms.SettingsForm.resources
+MLI/obj/Release/MLI.Forms.TreeForm.resources

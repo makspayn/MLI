@@ -15,10 +15,6 @@
 
 		#region Код, автоматически созданный конструктором форм Windows
 
-		/// <summary>
-		/// Требуемый метод для поддержки конструктора — не изменяйте 
-		/// содержимое этого метода с помощью редактора кода.
-		/// </summary>
 		private void InitializeComponent()
 		{
 			this.label1 = new System.Windows.Forms.Label();
@@ -244,24 +240,28 @@
 			this.menuItemTree.Name = "menuItemTree";
 			this.menuItemTree.Size = new System.Drawing.Size(207, 22);
 			this.menuItemTree.Text = "Дерево вывода";
+			this.menuItemTree.Click += new System.EventHandler(this.menuItemTree_Click);
 			// 
 			// menuItemExecUnits
 			// 
 			this.menuItemExecUnits.Name = "menuItemExecUnits";
 			this.menuItemExecUnits.Size = new System.Drawing.Size(207, 22);
 			this.menuItemExecUnits.Text = "Исполнительные блоки";
+			this.menuItemExecUnits.Click += new System.EventHandler(this.menuItemExecUnits_Click);
 			// 
 			// menuItemProcesses
 			// 
 			this.menuItemProcesses.Name = "menuItemProcesses";
 			this.menuItemProcesses.Size = new System.Drawing.Size(207, 22);
 			this.menuItemProcesses.Text = "Процессы";
+			this.menuItemProcesses.Click += new System.EventHandler(this.menuItemProcesses_Click);
 			// 
 			// menuItemStatistics
 			// 
 			this.menuItemStatistics.Name = "menuItemStatistics";
 			this.menuItemStatistics.Size = new System.Drawing.Size(207, 22);
 			this.menuItemStatistics.Text = "Статистика";
+			this.menuItemStatistics.Click += new System.EventHandler(this.menuItemStatistics_Click);
 			// 
 			// menuItemSettings
 			// 
@@ -282,14 +282,14 @@
 			// menuItemHelp
 			// 
 			this.menuItemHelp.Name = "menuItemHelp";
-			this.menuItemHelp.Size = new System.Drawing.Size(152, 22);
+			this.menuItemHelp.Size = new System.Drawing.Size(149, 22);
 			this.menuItemHelp.Text = "Помощь";
 			this.menuItemHelp.Click += new System.EventHandler(this.menuItemHelp_Click);
 			// 
 			// menuItemAbout
 			// 
 			this.menuItemAbout.Name = "menuItemAbout";
-			this.menuItemAbout.Size = new System.Drawing.Size(152, 22);
+			this.menuItemAbout.Size = new System.Drawing.Size(149, 22);
 			this.menuItemAbout.Text = "О программе";
 			this.menuItemAbout.Click += new System.EventHandler(this.menuItemAbout_Click);
 			// 

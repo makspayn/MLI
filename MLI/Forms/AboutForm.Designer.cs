@@ -15,10 +15,6 @@
 
 		#region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
 		private void InitializeComponent()
 		{
 			this.label1 = new System.Windows.Forms.Label();
@@ -55,7 +51,7 @@
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(144, 20);
 			this.label3.TabIndex = 2;
-			this.label3.Text = "Версия: 20170130";
+			this.label3.Text = "Версия: 20170131";
 			// 
 			// AboutForm
 			// 

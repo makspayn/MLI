@@ -1,6 +1,6 @@
 ﻿namespace MLI.Services
 {
-	public static class SettingService
+	public static class SettingsService
 	{
 		public static int ExecUnitCount { get; set; } = 1;
 

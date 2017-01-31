@@ -1,6 +1,6 @@
 ﻿namespace MLI.Forms
 {
-	partial class HelpForm
+	partial class TreeForm
 	{
 		private System.ComponentModel.IContainer components = null;
 
@@ -17,36 +17,34 @@
 
 		private void InitializeComponent()
 		{
-			this.rtbHelp = new System.Windows.Forms.RichTextBox();
+			this.tree = new System.Windows.Forms.TreeView();
 			this.SuspendLayout();
 			// 
-			// rtbHelp
+			// tree
 			// 
-			this.rtbHelp.Location = new System.Drawing.Point(0, 0);
-			this.rtbHelp.Name = "rtbHelp";
-			this.rtbHelp.ReadOnly = true;
-			this.rtbHelp.Size = new System.Drawing.Size(752, 393);
-			this.rtbHelp.TabIndex = 0;
-			this.rtbHelp.Text = "";
+			this.tree.Location = new System.Drawing.Point(0, 0);
+			this.tree.Name = "tree";
+			this.tree.Size = new System.Drawing.Size(484, 461);
+			this.tree.TabIndex = 0;
 			// 
-			// HelpForm
+			// TreeForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(752, 393);
-			this.Controls.Add(this.rtbHelp);
+			this.ClientSize = new System.Drawing.Size(484, 461);
+			this.Controls.Add(this.tree);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "HelpForm";
+			this.Name = "TreeForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Помощь";
+			this.Text = "Дерево вывода";
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.RichTextBox rtbHelp;
+		private System.Windows.Forms.TreeView tree;
 	}
 }
