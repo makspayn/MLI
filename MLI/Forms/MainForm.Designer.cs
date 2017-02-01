@@ -172,6 +172,7 @@
 			this.menuItemNewFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
 			this.menuItemNewFile.Size = new System.Drawing.Size(234, 22);
 			this.menuItemNewFile.Text = "Новый";
+			this.menuItemNewFile.Click += new System.EventHandler(this.menuItemNewFile_Click);
 			// 
 			// menuItemOpenFile
 			// 
@@ -179,6 +180,7 @@
 			this.menuItemOpenFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 			this.menuItemOpenFile.Size = new System.Drawing.Size(234, 22);
 			this.menuItemOpenFile.Text = "Открыть";
+			this.menuItemOpenFile.Click += new System.EventHandler(this.menuItemOpenFile_Click);
 			// 
 			// menuItemSaveFile
 			// 
@@ -186,6 +188,7 @@
 			this.menuItemSaveFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.menuItemSaveFile.Size = new System.Drawing.Size(234, 22);
 			this.menuItemSaveFile.Text = "Сохранить";
+			this.menuItemSaveFile.Click += new System.EventHandler(this.menuItemSaveFile_Click);
 			// 
 			// menuItemSaveAsFile
 			// 
@@ -194,6 +197,7 @@
             | System.Windows.Forms.Keys.S)));
 			this.menuItemSaveAsFile.Size = new System.Drawing.Size(234, 22);
 			this.menuItemSaveAsFile.Text = "Сохранить как...";
+			this.menuItemSaveAsFile.Click += new System.EventHandler(this.menuItemSaveAsFile_Click);
 			// 
 			// menuItemSeparator
 			// 
@@ -206,6 +210,7 @@
 			this.menuItemExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
 			this.menuItemExit.Size = new System.Drawing.Size(234, 22);
 			this.menuItemExit.Text = "Выход";
+			this.menuItemExit.Click += new System.EventHandler(this.menuItemExit_Click);
 			// 
 			// menuItemLogicInference
 			// 
