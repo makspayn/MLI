@@ -13,9 +13,7 @@ namespace MLI.Services
 		public static void NewFile()
 		{
 			fileName = "";
-			KnowledgeBase.Facts.Clear();
-			KnowledgeBase.Rules.Clear();
-			KnowledgeBase.Conclusions.Clear();
+			KnowledgeBase.Clear();
 		}
 
 		public static void OpenFile()
@@ -82,9 +80,7 @@ namespace MLI.Services
 						break;
 				}
 			}
-			KnowledgeBase.Facts.Clear();
-			KnowledgeBase.Rules.Clear();
-			KnowledgeBase.Conclusions.Clear();
+			KnowledgeBase.Clear();
 			KnowledgeBase.Facts.AddRange(facts);
 			KnowledgeBase.Rules.AddRange(rules);
 			KnowledgeBase.Conclusions.AddRange(conclusions);

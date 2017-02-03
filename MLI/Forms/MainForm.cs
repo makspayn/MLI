@@ -2,11 +2,13 @@
 using System.Windows.Forms;
 using MLI.Data;
 using MLI.Services;
+using NLog;
 
 namespace MLI.Forms
 {
 	public partial class MainForm : Form
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static MainForm instance;
 
 		private MainForm()
@@ -17,41 +19,6 @@ namespace MLI.Forms
 		public static MainForm GetInstance()
 		{
 			return instance ?? (instance = new MainForm());
-		}
-
-		private void menuItemTree_Click(object sender, System.EventArgs e)
-		{
-			TreeForm.ShowForm();
-		}
-
-		private void menuItemExecUnits_Click(object sender, System.EventArgs e)
-		{
-			ExecUnitsForm.ShowForm();
-		}
-
-		private void menuItemProcesses_Click(object sender, System.EventArgs e)
-		{
-			ProcessesForm.ShowForm();
-		}
-
-		private void menuItemStatistics_Click(object sender, System.EventArgs e)
-		{
-			StatisticsForm.ShowForm();
-		}
-
-		private void menuItemSettings_Click(object sender, System.EventArgs e)
-		{
-			SettingsForm.ShowForm();
-		}
-
-		private void menuItemHelp_Click(object sender, System.EventArgs e)
-		{
-			HelpForm.ShowForm();
-		}
-
-		private void menuItemAbout_Click(object sender, System.EventArgs e)
-		{
-			AboutForm.ShowForm();
 		}
 
 		private void menuItemNewFile_Click(object sender, System.EventArgs e)
@@ -105,6 +72,46 @@ namespace MLI.Forms
 			Close();
 		}
 
+		private void menuItemRun_Click(object sender, System.EventArgs e)
+		{
+			//
+		}
+
+		private void menuItemTree_Click(object sender, System.EventArgs e)
+		{
+			TreeForm.ShowForm();
+		}
+
+		private void menuItemExecUnits_Click(object sender, System.EventArgs e)
+		{
+			ExecUnitsForm.ShowForm();
+		}
+
+		private void menuItemProcesses_Click(object sender, System.EventArgs e)
+		{
+			ProcessesForm.ShowForm();
+		}
+
+		private void menuItemStatistics_Click(object sender, System.EventArgs e)
+		{
+			StatisticsForm.ShowForm();
+		}
+
+		private void menuItemSettings_Click(object sender, System.EventArgs e)
+		{
+			SettingsForm.ShowForm();
+		}
+
+		private void menuItemHelp_Click(object sender, System.EventArgs e)
+		{
+			HelpForm.ShowForm();
+		}
+
+		private void menuItemAbout_Click(object sender, System.EventArgs e)
+		{
+			AboutForm.ShowForm();
+		}
+
 		private void ReadKnowledgeBase()
 		{
 			rtbFacts.Lines = KnowledgeBase.Facts.ToArray();
@@ -114,17 +121,15 @@ namespace MLI.Forms
 
 		private void FillKnowledgeBase()
 		{
-			KnowledgeBase.Facts.Clear();
+			KnowledgeBase.Clear();
 			foreach (string fact in rtbFacts.Lines.Where(fact => !string.IsNullOrWhiteSpace(fact)))
 			{
 				KnowledgeBase.Facts.Add(fact);
 			}
-			KnowledgeBase.Rules.Clear();
 			foreach (string rule in rtbRules.Lines.Where(rule => !string.IsNullOrWhiteSpace(rule)))
 			{
 				KnowledgeBase.Rules.Add(rule);
 			}
-			KnowledgeBase.Conclusions.Clear();
 			foreach (string conclusion in rtbConclusions.Lines.Where(conclusion => !string.IsNullOrWhiteSpace(conclusion)))
 			{
 				KnowledgeBase.Conclusions.Add(conclusion);

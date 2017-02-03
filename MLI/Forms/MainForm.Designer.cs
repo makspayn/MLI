@@ -231,6 +231,7 @@
 			this.menuItemRun.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
 			this.menuItemRun.Size = new System.Drawing.Size(207, 22);
 			this.menuItemRun.Text = "Выполнить";
+			this.menuItemRun.Click += new System.EventHandler(this.menuItemRun_Click);
 			// 
 			// menuItemStop
 			// 
