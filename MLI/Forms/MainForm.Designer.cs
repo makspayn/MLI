@@ -240,6 +240,7 @@
 			this.menuItemStop.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
 			this.menuItemStop.Size = new System.Drawing.Size(207, 22);
 			this.menuItemStop.Text = "Остановить";
+			this.menuItemStop.Click += new System.EventHandler(this.menuItemStop_Click);
 			// 
 			// menuItemTree
 			// 

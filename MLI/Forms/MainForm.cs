@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using MLI.Data;
 using MLI.Services;
@@ -33,9 +34,10 @@ namespace MLI.Forms
 			{
 				FileService.OpenFile();
 			}
-			catch
+			catch (Exception exception)
 			{
 				MessageBox.Show(@"Возникла ошибка при чтении файла!");
+				logger.Error($"Возникла ошибка при чтении файла!\n {exception}");
 				return;
 			}
 			ReadKnowledgeBase();
@@ -48,9 +50,10 @@ namespace MLI.Forms
 			{
 				FileService.SaveFile();
 			}
-			catch
+			catch (Exception exception)
 			{
 				MessageBox.Show(@"Возникла ошибка при сохранении файла!");
+				logger.Error($"Возникла ошибка при сохранении файла!\n {exception}");
 			}
 		}
 
@@ -61,9 +64,10 @@ namespace MLI.Forms
 			{
 				FileService.SaveAsFile();
 			}
-			catch
+			catch (Exception exception)
 			{
 				MessageBox.Show(@"Возникла ошибка при сохранении файла!");
+				logger.Error($"Возникла ошибка при сохранении файла!\n {exception}");
 			}
 		}
 
@@ -73,6 +77,11 @@ namespace MLI.Forms
 		}
 
 		private void menuItemRun_Click(object sender, System.EventArgs e)
+		{
+			//
+		}
+
+		private void menuItemStop_Click(object sender, EventArgs e)
 		{
 			//
 		}

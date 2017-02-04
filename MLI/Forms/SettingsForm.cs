@@ -1,10 +1,12 @@
 ﻿using System.Windows.Forms;
 using MLI.Services;
+using NLog;
 
 namespace MLI.Forms
 {
 	public partial class SettingsForm : Form
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static SettingsForm instance;
 
 		private SettingsForm()
@@ -64,6 +66,11 @@ namespace MLI.Forms
 			if (rbN.Checked) SettingsService.InfoLevel = 1;
 			if (rbM.Checked) SettingsService.InfoLevel = 2;
 			if (rbU.Checked) SettingsService.InfoLevel = 3;
+			logger.Info("Установлены новые настройки:\n" +
+				$"Число исполнительных блоков: {SettingsService.ExecUnitCount}\n" +
+				$"Число блоков унификации: {SettingsService.UnifUnitCount}\n" +
+				$"Длина такта (нс): {SettingsService.TickLength}\n" +
+				$"Уровень сбора информации: {SettingsService.InfoLevel}");
 		}
 	}
 }
