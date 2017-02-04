@@ -59,7 +59,7 @@ namespace MLI.Services
 
 		private static void OpenXml()
 		{
-			logger.Debug($"Открытие файла {fileName}");
+			logger.Debug($"Чтение файла {fileName}");
 			XmlDocument document = new XmlDocument();
 			document.Load(fileName);
 			if (document.DocumentElement == null)
@@ -91,7 +91,7 @@ namespace MLI.Services
 			KnowledgeBase.Facts.AddRange(facts);
 			KnowledgeBase.Rules.AddRange(rules);
 			KnowledgeBase.Conclusions.AddRange(conclusions);
-			logger.Debug($"Файл {fileName} успешно открыт");
+			logger.Debug($"Файл {fileName} успешно прочитан");
 		}
 
 		private static void CreateXml()
@@ -117,21 +117,21 @@ namespace MLI.Services
 				XmlNode element = document.CreateElement("Fact");
 				element.InnerText = fact;
 				document.DocumentElement?.AppendChild(element);
-				logger.Debug($"Записан факт {fact}");
+				logger.Debug($"Сохранен факт {fact}");
 			}
 			foreach (string rule in KnowledgeBase.Rules)
 			{
 				XmlNode element = document.CreateElement("Rule");
 				element.InnerText = rule;
 				document.DocumentElement?.AppendChild(element);
-				logger.Debug($"Записано правило {rule}");
+				logger.Debug($"Сохранено правило {rule}");
 			}
 			foreach (string conclusion in KnowledgeBase.Conclusions)
 			{
 				XmlNode element = document.CreateElement("Conclusion");
 				element.InnerText = conclusion;
 				document.DocumentElement?.AppendChild(element);
-				logger.Debug($"Записано выводимое правило {conclusion}");
+				logger.Debug($"Сохранено выводимое правило {conclusion}");
 			}
 			document.Save(fileName);
 			logger.Debug($"Файл {fileName} успешно сохранен");

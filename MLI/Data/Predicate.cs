@@ -1,29 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using NLog;
 
 namespace MLI.Data
 {
 	public class Predicate
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
+		private static Regex rgxPredicate = new Regex(@"^[-+][A-Z][a-zA-Z0-9]*\([^\s]*\)$");
 		private static string separator = ",";
 		private bool type;
 		private string name;
 		private List<Argument> arguments;
-		private static Regex rgxPredicate = new Regex(@"^[-+][A-Z][a-zA-Z0-9]*\([^\s]*\)$");
 
 		public Predicate(string predicate)
 		{
-			if (rgxPredicate.IsMatch(predicate))
-			{
-				type = predicate[0] == '+';
-				name = predicate.Substring(1, predicate.IndexOf("(", StringComparison.Ordinal) - 1);
-				int prefixLength = name.Length + 2;
-				arguments = Argument.ParseArguments(predicate.Substring(prefixLength, predicate.Length - prefixLength - 1));
+			try {
+				if (rgxPredicate.IsMatch(predicate))
+				{
+					type = predicate[0] == '+';
+					name = predicate.Substring(1, predicate.IndexOf("(", StringComparison.Ordinal) - 1);
+					int prefixLength = name.Length + 2;
+					arguments = Argument.ParseArguments(predicate.Substring(prefixLength, predicate.Length - prefixLength - 1));
+
+				}
+				else
+				{
+					throw new Exception("Неверный формат предиката");
+				}
 			}
-			else
+			catch (Exception exception)
 			{
-				throw new Exception($"Некорректный предикат: {predicate}");
+				logger.Error($"Некорректный предикат: {predicate}");
+				throw new Exception($"Некорректный предикат: {predicate}\n" + exception.Message);
 			}
 		}
 
@@ -32,9 +42,9 @@ namespace MLI.Data
 			return (type ? "+" : "-") + $"{name}({string.Join(separator, arguments)})";
 		}
 
-		public static bool Equals(Predicate pred1, Predicate pred2)
+		public static bool Equals(Predicate predicate1, Predicate predicate2)
 		{
-			return string.Equals(pred1.ToString(), pred2.ToString());
+			return string.Equals(predicate1.ToString(), predicate2.ToString());
 		}
 	}
 }

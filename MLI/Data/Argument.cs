@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using NLog;
 
 namespace MLI.Data
 {
@@ -11,13 +12,14 @@ namespace MLI.Data
 
 	public class Argument
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
+		private static Regex rgxConstant = new Regex(@"^[A-Z0-9][a-zA-Z0-9]*$");
+		private static Regex rgxVariable = new Regex(@"^[a-z][a-zA-Z0-9]*$");
+		private static Regex rgxFunctor = new Regex(@"^[a-z][a-zA-Z0-9]*\([^\s]*\)$");
 		private static string separator = ",";
 		private ArgumentType type;
 		private string name;
 		private List<Argument> arguments;
-		private static Regex rgxConstant = new Regex(@"^[A-Z0-9][a-zA-Z0-9]*$");
-		private static Regex rgxVariable = new Regex(@"^[a-z][a-zA-Z0-9]*$");
-		private static Regex rgxFunctor = new Regex(@"^[a-z][a-zA-Z0-9]*\([^\s]*\)$");
 
 		public Argument(string argument)
 		{
@@ -40,6 +42,7 @@ namespace MLI.Data
 			}
 			else
 			{
+				logger.Error($"Некорректный аргумент: {argument}");
 				throw new Exception($"Некорректный аргумент: {argument}");
 			}
 		}
@@ -49,9 +52,9 @@ namespace MLI.Data
 			return type == ArgumentType.Functor ? $"{name}({string.Join(separator, arguments)})" : name;
 		}
 
-		public static bool Equals(Argument arg1, Argument arg2)
+		public static bool Equals(Argument argument1, Argument argument2)
 		{
-			return string.Equals(arg1.ToString(), arg2.ToString());
+			return string.Equals(argument1.ToString(), argument2.ToString());
 		}
 
 		public static List<Argument> ParseArguments(string arguments)

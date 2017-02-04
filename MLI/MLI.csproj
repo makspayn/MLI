@@ -59,8 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Argument.cs" />
+    <Compile Include="Data\Disjunct.cs" />
     <Compile Include="Data\KnowledgeBase.cs" />
     <Compile Include="Data\Predicate.cs" />
+    <Compile Include="Data\Sequence.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
