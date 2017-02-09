@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using MLI.Data;
@@ -11,6 +12,7 @@ namespace MLI.Forms
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static MainForm instance;
+		private Machine.Machine machine;
 
 		private MainForm()
 		{
@@ -37,7 +39,7 @@ namespace MLI.Forms
 			catch (Exception exception)
 			{
 				MessageBox.Show(@"Возникла ошибка при чтении файла!");
-				logger.Error($"Возникла ошибка при чтении файла!\n {exception}");
+				logger.Error($"Возникла ошибка при чтении файла!\n{exception}");
 				return;
 			}
 			ReadKnowledgeBase();
@@ -53,7 +55,7 @@ namespace MLI.Forms
 			catch (Exception exception)
 			{
 				MessageBox.Show(@"Возникла ошибка при сохранении файла!");
-				logger.Error($"Возникла ошибка при сохранении файла!\n {exception}");
+				logger.Error($"Возникла ошибка при сохранении файла!\n{exception}");
 			}
 		}
 
@@ -67,7 +69,7 @@ namespace MLI.Forms
 			catch (Exception exception)
 			{
 				MessageBox.Show(@"Возникла ошибка при сохранении файла!");
-				logger.Error($"Возникла ошибка при сохранении файла!\n {exception}");
+				logger.Error($"Возникла ошибка при сохранении файла!\n{exception}");
 			}
 		}
 
@@ -78,12 +80,25 @@ namespace MLI.Forms
 
 		private void menuItemRun_Click(object sender, System.EventArgs e)
 		{
-			//
+			logger.Debug("Создание машины");
+			FillKnowledgeBase();
+			try
+			{
+				machine = CreateMachine();
+			}
+			catch (Exception exception)
+			{
+				MessageBox.Show(exception.Message);
+				return;
+			}
+			SwitchState(false);
+			machine.Run();
 		}
 
 		private void menuItemStop_Click(object sender, EventArgs e)
 		{
-			//
+			machine.Stop();
+			SwitchState(true);
 		}
 
 		private void menuItemTree_Click(object sender, System.EventArgs e)
@@ -143,6 +158,71 @@ namespace MLI.Forms
 			{
 				KnowledgeBase.Conclusions.Add(conclusion);
 			}
+		}
+
+		private Machine.Machine CreateMachine()
+		{
+			List<Sequence> facts = new List<Sequence>();
+			List<Sequence> rules = new List<Sequence>();
+			List<Sequence> conclusions = new List<Sequence>();
+			try
+			{
+				if (KnowledgeBase.Facts.Count != 0)
+				{
+					facts.AddRange(KnowledgeBase.Facts.Select(fact => new Sequence(fact, Sequence.SequenceType.Fact)));
+				}
+				else
+				{
+					throw new Exception("Факты отсутствуют!");
+				}
+			}
+			catch (Exception exception)
+			{
+				logger.Error("Создание машины прервано. Ошибка при создании фактов!");
+				throw new Exception($"Ошибка при создании фактов!\n{exception.Message}");
+			}
+			try
+			{
+				if (KnowledgeBase.Rules.Count != 0)
+				{
+					rules.AddRange(KnowledgeBase.Rules.Select(rule => new Sequence(rule, Sequence.SequenceType.Rule)));
+				}
+				else
+				{
+					throw new Exception("Правила отсутствуют!");
+				}
+			}
+			catch (Exception exception)
+			{
+				logger.Error("Создание машины прервано. Ошибка при создании правил!");
+				throw new Exception($"Ошибка при создании правил!\n{exception.Message}");
+			}
+			try
+			{
+				if (KnowledgeBase.Rules.Count != 0)
+				{
+					conclusions.AddRange(KnowledgeBase.Conclusions.Select(conclusion => new Sequence(conclusion, Sequence.SequenceType.Conclusion)));
+				}
+				else
+				{
+					throw new Exception("Выводимые правила отсутствуют!");
+				}
+			}
+			catch (Exception exception)
+			{
+				logger.Error("Создание машины прервано. Ошибка при создании выводимых правил!");
+				throw new Exception($"Ошибка при создании выводимых правил!\n{exception.Message}");
+			}
+			return new Machine.Machine(facts, rules, conclusions);
+		}
+
+		private void SwitchState(bool state)
+		{
+			menuItemRun.Enabled = state;
+			menuItemStop.Enabled = !state;
+			rtbFacts.Enabled = state;
+			rtbRules.Enabled = state;
+			rtbConclusions.Enabled = state;
 		}
 	}
 }
