@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MLI.Data;
+using MLI.Method;
 using MLI.Services;
 using NLog;
 
@@ -25,6 +26,7 @@ namespace MLI.Machine
 			BuildWorkSupervisor();
 			BuildExecUnits();
 			BuildControlUnit();
+			ResolveDependecies();
 			logger.Info($"Создана машина {execUnitCount}x{unifUnitCount}");
 		}
 
@@ -47,7 +49,7 @@ namespace MLI.Machine
 		private void BuildWorkSupervisor()
 		{
 			logger.Debug("Создание диспетчера работы машины");
-			workSupervisor = new WorkSupervisor(execUnits, controlUnit);
+			workSupervisor = new WorkSupervisor();
 		}
 
 		private void BuildExecUnits()
@@ -63,17 +65,32 @@ namespace MLI.Machine
 		private void BuildControlUnit()
 		{
 			logger.Debug("Создание блока управления");
-			controlUnit = new ControlUnit(workSupervisor.GetFrameList());
+			controlUnit = new ControlUnit();
+		}
+
+		private void ResolveDependecies()
+		{
+			logger.Debug("Разрешение зависимостей");
+			workSupervisor.SetExecUnits(execUnits);
+			workSupervisor.SetControlUnit(controlUnit);
+			foreach (ExecUnit execUnit in execUnits)
+			{
+				execUnit.SetWorkSupervisor(workSupervisor);
+			}
+			controlUnit.SetWorkSupervisor(workSupervisor);
 		}
 
 		public void Run()
 		{
-			
+			logger.Info("Машина запущена");
+			Process mainProcess = new MainProcess();
+			List<Message> messages = new List<Message> {Message.GetCreateMessage(mainProcess, null) }; 
+			workSupervisor.AddMessages(messages, null);
 		}
 
 		public void Stop()
 		{
-
+			logger.Info("Машина остановлена");
 		}
 	}
 }

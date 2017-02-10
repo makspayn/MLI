@@ -5,13 +5,19 @@ namespace MLI.Machine
 {
 	public class ControlUnit
 	{
+		private WorkSupervisor workSupervisor;
 		private List<Frame> frameList; 
 		private bool busy;
 
-		public ControlUnit(List<Frame> frameList)
+		public ControlUnit()
 		{
-			this.frameList = frameList;
 			busy = false;
+		}
+
+		public void SetWorkSupervisor(WorkSupervisor workSupervisor)
+		{
+			this.workSupervisor = workSupervisor;
+			frameList = workSupervisor.GetFrameList();
 		}
 
 		public void SetBusyFlag(bool busy)
@@ -26,7 +32,20 @@ namespace MLI.Machine
 
 		public void ProcessMessage(Message message)
 		{
-			
+			lock (frameList)
+			{
+				if (message.GetMessageTypeType() == Message.MessageType.Create)
+				{
+					Frame frame = new Frame(message.GetProcess());
+					frameList.Add(frame);
+					workSupervisor.AddProcess(message.GetProcess(), this);
+				}
+				else
+				{
+					
+				}
+				
+			}
 		}
 	}
 }

@@ -38,8 +38,8 @@ namespace MLI.Forms
 			}
 			catch (Exception exception)
 			{
-				MessageBox.Show(@"Возникла ошибка при чтении файла!");
 				logger.Error($"Возникла ошибка при чтении файла!\n{exception}");
+				MessageBox.Show(@"Возникла ошибка при чтении файла!");
 				return;
 			}
 			ReadKnowledgeBase();
@@ -54,8 +54,8 @@ namespace MLI.Forms
 			}
 			catch (Exception exception)
 			{
-				MessageBox.Show(@"Возникла ошибка при сохранении файла!");
 				logger.Error($"Возникла ошибка при сохранении файла!\n{exception}");
+				MessageBox.Show(@"Возникла ошибка при сохранении файла!");
 			}
 		}
 
@@ -68,8 +68,8 @@ namespace MLI.Forms
 			}
 			catch (Exception exception)
 			{
-				MessageBox.Show(@"Возникла ошибка при сохранении файла!");
 				logger.Error($"Возникла ошибка при сохранении файла!\n{exception}");
+				MessageBox.Show(@"Возникла ошибка при сохранении файла!");
 			}
 		}
 
@@ -92,11 +92,13 @@ namespace MLI.Forms
 				return;
 			}
 			SwitchState(false);
+			logger.Debug("Запуск машины");
 			machine.Run();
 		}
 
 		private void menuItemStop_Click(object sender, EventArgs e)
 		{
+			logger.Debug("Остановка машины");
 			machine.Stop();
 			SwitchState(true);
 		}

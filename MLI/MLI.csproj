@@ -119,7 +119,8 @@
     <Compile Include="Machine\Machine.cs" />
     <Compile Include="Machine\UnifUnit.cs" />
     <Compile Include="Machine\WorkSupervisor.cs" />
-    <Compile Include="Method\IProcess.cs" />
+    <Compile Include="Method\Process.cs" />
+    <Compile Include="Method\MainProcess.cs" />
     <Compile Include="Method\ProcessU.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

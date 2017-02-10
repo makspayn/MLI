@@ -10,8 +10,8 @@ namespace MLI.Data
 		}
 
 		private MessageType type;
-		private IProcess process;
-		private IProcess parentProcess;
+		private Process process;
+		private Process parentProcess;
 
 		private Message()
 		{
@@ -20,7 +20,11 @@ namespace MLI.Data
 
 		public MessageType GetMessageTypeType() => type;
 
-		public static Message GetCreateMessage(IProcess process, IProcess parentProcess)
+		public Process GetProcess() => process;
+
+		public Process GetParentProcess() => parentProcess;
+
+		public static Message GetCreateMessage(Process process, Process parentProcess)
 		{
 			return new Message
 			{
@@ -30,7 +34,7 @@ namespace MLI.Data
 			};
 		}
 
-		public static Message GetEndMessage(IProcess process)
+		public static Message GetEndMessage(Process process)
 		{
 			return new Message
 			{
