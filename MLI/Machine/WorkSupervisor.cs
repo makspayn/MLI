@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using MLI.Data;
 using MLI.Method;
+using NLog;
+using Message = MLI.Data.Message;
 
 namespace MLI.Machine
 {
 	public class WorkSupervisor
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private List<ExecUnit> execUnits;
 		private ControlUnit controlUnit;
 		private Queue messageQueue;
@@ -36,34 +42,57 @@ namespace MLI.Machine
 			this.controlUnit = controlUnit;
 		}
 
+		public void AddMessage(Message message, ExecUnit execUnit)
+		{
+			AddMessages(new List<Message> { message }, execUnit);
+		}
+
 		public void AddMessages(List<Message> messages, ExecUnit execUnit)
 		{
-			execUnit?.SetBusyFlag(false);
+			lock (execUnit)
+			{
+				execUnit.SetBusyFlag(false);
+			}
 			foreach (Message message in messages)
 			{
 				messageQueue.Enqueue(message);
 			}
-			TryRunControlUnit();
+			TryGiveTasks();
 		}
 
 		public void AddProcess(Process process, ControlUnit controlUnit)
 		{
-			controlUnit?.SetBusyFlag(false);
+			lock (controlUnit)
+			{
+				controlUnit.SetBusyFlag(false);
+			}
 			processQueue.Enqueue(process);
-			TryRunExecUnit();
+			TryGiveTasks();
+		}
+
+		public void TryGiveTasks()
+		{
+			new Thread(() =>
+			{
+				TryRunControlUnit();
+			}).Start();
+			new Thread(() =>
+			{
+				TryRunExecUnit();
+			}).Start();
 		}
 
 		private void TryRunExecUnit()
 		{
-			lock (execUnits)
+			foreach (ExecUnit execUnit in execUnits)
 			{
-				foreach (ExecUnit execUnit in execUnits.
-					Where(execUnit => !execUnit.IsBusy()).
-					TakeWhile(execUnit => processQueue.Count > 0))
+				lock (execUnit)
 				{
+					if (processQueue.Count <= 0) return;
+					if (execUnit.IsBusy()) continue;
 					execUnit.SetBusyFlag(true);
-					execUnit.RunProcess((Process) processQueue.Dequeue());
 				}
+				execUnit.RunProcess((Process) processQueue.Dequeue());
 			}
 		}
 
@@ -73,8 +102,8 @@ namespace MLI.Machine
 			{
 				if (controlUnit.IsBusy() || messageQueue.Count <= 0) return;
 				controlUnit.SetBusyFlag(true);
-				controlUnit.ProcessMessage((Message) messageQueue.Dequeue());
 			}
+			controlUnit.ProcessMessage((Message)messageQueue.Dequeue());
 		}
 	}
 }

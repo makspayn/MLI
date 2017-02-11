@@ -8,8 +8,10 @@ namespace MLI.Method
 
 		public MainProcess()
 		{
-			logger.Debug("Создан Main-процесс");
 			reentry = false;
+			name = "Main";
+			index = "";
+			logger.Debug("Создан Main-процесс");
 		}
 
 		protected override void FirstRun()
@@ -21,6 +23,7 @@ namespace MLI.Method
 			}
 			status = Status.Progress;
 			reentry = true;
+			logger.Debug("Main-процесс завершен");
 		}
 
 		protected override void ReRun()
@@ -28,6 +31,7 @@ namespace MLI.Method
 			logger.Debug("Повторно запущен Main-процесс");
 			childProcesses.Clear();
 			status = Status.Success;
+			logger.Debug("Main-процесс окончательно завершен");
 		}
 	}
 }

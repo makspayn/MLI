@@ -12,6 +12,8 @@ namespace MLI.Method
 		protected List<Process> childProcesses = new List<Process>();
 		protected Status status;
 		protected bool reentry;
+		protected string name;
+		protected string index;
 
 		public void Run()
 		{
@@ -42,6 +44,11 @@ namespace MLI.Method
 		public bool GetReentry()
 		{
 			return reentry;
+		}
+
+		public string GetName()
+		{
+			return name + index;
 		}
 	}
 }

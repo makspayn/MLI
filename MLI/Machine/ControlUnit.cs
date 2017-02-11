@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using MLI.Data;
+using NLog;
 
 namespace MLI.Machine
 {
 	public class ControlUnit
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private WorkSupervisor workSupervisor;
 		private List<Frame> frameList; 
 		private bool busy;
@@ -32,7 +36,7 @@ namespace MLI.Machine
 
 		public void ProcessMessage(Message message)
 		{
-			lock (frameList)
+			new Thread(() =>
 			{
 				if (message.GetMessageTypeType() == Message.MessageType.Create)
 				{
@@ -42,10 +46,9 @@ namespace MLI.Machine
 				}
 				else
 				{
-					
+
 				}
-				
-			}
+			}).Start();
 		}
 	}
 }
