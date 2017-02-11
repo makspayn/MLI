@@ -9,6 +9,7 @@ namespace MLI.Method
 			Success, Progress, Failure
 		}
 
+		protected Process parentProcess;
 		protected List<Process> childProcesses = new List<Process>();
 		protected Status status;
 		protected bool reentry;
@@ -30,6 +31,11 @@ namespace MLI.Method
 		protected abstract void FirstRun();
 
 		protected abstract void ReRun();
+
+		public Process GetParentProcess()
+		{
+			return parentProcess;
+		}
 
 		public List<Process> GetChildProcesses()
 		{

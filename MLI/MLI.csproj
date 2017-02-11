@@ -61,6 +61,7 @@
     <Compile Include="Data\Argument.cs" />
     <Compile Include="Data\Disjunct.cs" />
     <Compile Include="Data\Frame.cs" />
+    <Compile Include="Data\FrameList.cs" />
     <Compile Include="Data\KnowledgeBase.cs" />
     <Compile Include="Data\Message.cs" />
     <Compile Include="Data\Predicate.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Machine\ExecUnit.cs" />
     <Compile Include="Machine\KnowledgeBase.cs" />
     <Compile Include="Machine\Machine.cs" />
+    <Compile Include="Machine\Processor.cs" />
     <Compile Include="Machine\UnifUnit.cs" />
     <Compile Include="Machine\WorkSupervisor.cs" />
     <Compile Include="Method\Process.cs" />

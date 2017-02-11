@@ -26,7 +26,7 @@ namespace MLI.Machine
 			BuildWorkSupervisor();
 			BuildExecUnits();
 			BuildControlUnit();
-			ResolveDependecies();
+			ResolveDependencies();
 			instance = this;
 			logger.Info($"Создана машина {execUnitCount}x{unifUnitCount}");
 		}
@@ -69,7 +69,7 @@ namespace MLI.Machine
 			controlUnit = new ControlUnit();
 		}
 
-		private void ResolveDependecies()
+		private void ResolveDependencies()
 		{
 			logger.Debug("Разрешение зависимостей");
 			workSupervisor.SetExecUnits(execUnits);
@@ -85,7 +85,8 @@ namespace MLI.Machine
 		{
 			logger.Info("Машина запущена");
 			Process mainProcess = new MainProcess();
-			workSupervisor.AddMessage(Message.GetCreateMessage(mainProcess, null), execUnits[0]);
+			workSupervisor.AddMessage(
+				new Message(mainProcess, Message.MessageType.Create), execUnits[0]);
 		}
 
 		public void Stop()

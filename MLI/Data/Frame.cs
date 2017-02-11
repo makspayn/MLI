@@ -4,17 +4,19 @@ namespace MLI.Data
 {
 	public class Frame
 	{
-		public Process process { get; }
-		public bool state { get; set; }
-		public bool reentry { get; set; }
-		public int childProcessCount { get; set; }
+		public Process Process { get; }
+		public Process ParentProcess { get; }
+		public bool State { get; set; }
+		public bool Reentry { get; set; }
+		public int ChildProcessCount { get; set; }
 
-		public Frame(Process process)
+		public Frame(Message message)
 		{
-			this.process = process;
-			state = false;
-			reentry = false;
-			childProcessCount = 0;
+			Process = message.Process;
+			ParentProcess = message.ParentProcess;
+			State = true;
+			Reentry = false;
+			ChildProcessCount = 0;
 		}
 	}
 }

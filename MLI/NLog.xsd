@@ -263,7 +263,7 @@
         </xs:attribute>
         <xs:attribute name="batchSize" type="xs:integer">
           <xs:annotation>
-            <xs:documentation>Number of log events that should be processed in a batch by the lazy writer thread.</xs:documentation>
+            <xs:documentation>Number of log events that should be Processed in a batch by the lazy writer thread.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="fullBatchSizeWriteLimit" type="xs:integer">
@@ -1255,7 +1255,7 @@
         </xs:attribute>
         <xs:attribute name="concurrentWrites" type="xs:boolean">
           <xs:annotation>
-            <xs:documentation>Indicates whether concurrent writes to the log file by multiple processes on the same host.</xs:documentation>
+            <xs:documentation>Indicates whether concurrent writes to the log file by multiple Processes on the same host.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="keepFileOpen" type="xs:boolean">
@@ -1270,7 +1270,7 @@
         </xs:attribute>
         <xs:attribute name="networkWrites" type="xs:boolean">
           <xs:annotation>
-            <xs:documentation>Indicates whether concurrent writes to the log file by multiple processes on different network hosts.</xs:documentation>
+            <xs:documentation>Indicates whether concurrent writes to the log file by multiple Processes on different network hosts.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="openFileCacheSize" type="xs:integer">
@@ -1428,7 +1428,7 @@
         </xs:attribute>
         <xs:attribute name="revertToSelf" type="xs:boolean">
           <xs:annotation>
-            <xs:documentation>Indicates whether to revert to the credentials of the process instead of impersonating another user.</xs:documentation>
+            <xs:documentation>Indicates whether to revert to the credentials of the Process instead of impersonating another user.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="userName" type="xs:string">
@@ -1731,7 +1731,7 @@
         </xs:attribute>
         <xs:attribute name="pickupDirectoryLocation" type="xs:string">
           <xs:annotation>
-            <xs:documentation>Folder where applications save mail messages to be processed by the local SMTP server.</xs:documentation>
+            <xs:documentation>Folder where applications save mail messages to be Processed by the local SMTP server.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="deliveryMethod" type="System.Net.Mail.SmtpDeliveryMethod">

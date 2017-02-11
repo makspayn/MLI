@@ -1,27 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using MLI.Data;
 using MLI.Method;
 using NLog;
 
 namespace MLI.Machine
 {
-	public class ExecUnit
+	public class ExecUnit : Processor
 	{
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private int number;
 		private int unifUnitCount;
 		private WorkSupervisor workSupervisor;
 		private List<UnifUnit> unifUnits;
-		private bool busy;
-		
+		private Process process;
+
 		public ExecUnit(int number, int unifUnitCount)
 		{
 			this.number = number;
 			this.unifUnitCount = unifUnitCount;
-			busy = false;
 			BuildUnifUnits();
 		}
 
@@ -39,41 +37,35 @@ namespace MLI.Machine
 			this.workSupervisor = workSupervisor;
 		}
 
-		public void SetBusyFlag(bool busy)
-		{
-			this.busy = busy;
-		}
-
-		public bool IsBusy()
-		{
-			return busy;
-		}
-
 		public int GetNumber() => number;
 
 		public void RunProcess(Process process)
 		{
+			this.process = process;
+			ReRun();
+		}
+
+		protected override void Run()
+		{
 			logger.Debug($"На {number} ИБ поступил процесс {process.GetName()}");
-			new Thread(() =>
-			{
-				process.Run();
-				FormMessages(process);
-			}).Start();
+			process.Run();
+			FormMessages(process);
 		}
 
 		private void FormMessages(Process process)
 		{
-			//logger.Debug($"{number} ИБ формирует сообщения");
+			logger.Debug($"{number} ИБ формирует сообщения");
 			if (process.GetStatus() == Process.Status.Progress)
 			{
-				List<Message> messages = process.GetChildProcesses()
-					.Select(childProcess =>
-						Message.GetCreateMessage(childProcess, process)).ToList();
+				List<Message> messages = process.GetChildProcesses().
+					Select(childProcess =>
+						new Message(childProcess, Message.MessageType.Create)).ToList();
 				workSupervisor.AddMessages(messages, this);
 			}
 			else
 			{
-				workSupervisor.AddMessage(Message.GetEndMessage(process), this);
+				workSupervisor.AddMessage(
+					new Message(process, Message.MessageType.End), this);
 			}
 		}
 	}

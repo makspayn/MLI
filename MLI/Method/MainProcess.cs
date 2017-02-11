@@ -8,6 +8,7 @@ namespace MLI.Method
 
 		public MainProcess()
 		{
+			parentProcess = null;
 			reentry = false;
 			name = "Main";
 			index = "";
@@ -19,7 +20,7 @@ namespace MLI.Method
 			logger.Debug("Запущен Main-процесс");
 			for (int i = 0; i < 10; i++)
 			{
-				childProcesses.Add(new ProcessU());
+				childProcesses.Add(new ProcessU(this));
 			}
 			status = Status.Progress;
 			reentry = true;

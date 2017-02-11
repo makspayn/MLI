@@ -9,38 +9,15 @@ namespace MLI.Data
 			Create, End
 		}
 
-		private MessageType type;
-		private Process process;
-		private Process parentProcess;
+		public MessageType Type { get; }
+		public Process Process { get; }
+		public Process ParentProcess { get; }
 
-		private Message()
+		public Message(Process process, MessageType type)
 		{
-			
-		}
-
-		public MessageType GetMessageTypeType() => type;
-
-		public Process GetProcess() => process;
-
-		public Process GetParentProcess() => parentProcess;
-
-		public static Message GetCreateMessage(Process process, Process parentProcess)
-		{
-			return new Message
-			{
-				type = MessageType.Create,
-				process = process,
-				parentProcess = parentProcess
-			};
-		}
-
-		public static Message GetEndMessage(Process process)
-		{
-			return new Message
-			{
-				type = MessageType.End,
-				process = process
-			};
+			Type = type;
+			Process = process;
+			ParentProcess = process.GetParentProcess();
 		}
 	}
 }
