@@ -16,12 +16,19 @@ namespace MLI.Forms
 
 		private MainForm()
 		{
+			CheckForIllegalCrossThreadCalls = false;
 			InitializeComponent();
 		}
 
 		public static MainForm GetInstance()
 		{
 			return instance ?? (instance = new MainForm());
+		}
+
+		public void MachineCompleteEventHandler(string message)
+		{
+			SwitchState(true);
+			MessageBox.Show(message);
 		}
 
 		private void menuItemNewFile_Click(object sender, System.EventArgs e)
@@ -100,7 +107,6 @@ namespace MLI.Forms
 		{
 			logger.Debug("Остановка машины");
 			machine.Stop();
-			SwitchState(true);
 		}
 
 		private void menuItemTree_Click(object sender, System.EventArgs e)

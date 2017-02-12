@@ -4,15 +4,18 @@ namespace MLI.Machine
 {
 	public abstract class Processor
 	{
-		private Semaphore semaphore;
+		protected string id;
 		private bool busy;
+		private bool complete;
+		private Semaphore semaphore;
 
-		protected Processor()
+		protected Processor(string id)
 		{
+			this.id = id;
 			busy = false;
+			complete = false;
 			semaphore = new Semaphore(0, 1);
-			Thread thread = new Thread(RunInThread);
-			thread.IsBackground = true;
+			Thread thread = new Thread(RunInThread) { IsBackground = true };
 			thread.Start();
 		}
 
@@ -25,6 +28,14 @@ namespace MLI.Machine
 		{
 			return busy;
 		}
+
+		public void CompleteWork()
+		{
+			complete = true;
+			ReRun();
+		}
+
+		public string GetId() => id;
 
 		protected abstract void Run();
 
@@ -42,12 +53,11 @@ namespace MLI.Machine
 
 		private void RunInThread()
 		{
-			while (true)
+			while (!complete)
 			{
 				semaphore.WaitOne();
 				Run();
 			}
-			
 		}
 	}
 }

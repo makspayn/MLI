@@ -1,31 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using MLI.Data;
 using MLI.Method;
-using NLog;
 using Message = MLI.Data.Message;
 
 namespace MLI.Machine
 {
-	public class WorkSupervisor
+	public class Supervisor
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
-		private List<ExecUnit> execUnits;
-		private ControlUnit controlUnit;
 		private Queue messageQueue;
 		private Queue processQueue;
 		private FrameList frameList;
-		private RunExecUnitsBlock runExecUnitsBlock;
+		private RunProcessUnitsBlock runProcessUnitsBlock;
 		private RunControlUnitBlock runControlUnitBlock;
 
-		public WorkSupervisor()
+		public Supervisor()
 		{
 			messageQueue = Queue.Synchronized(new Queue());
 			processQueue = Queue.Synchronized(new Queue());
 			frameList = new FrameList();
-			runExecUnitsBlock = new RunExecUnitsBlock(processQueue);
-			runControlUnitBlock = new RunControlUnitBlock(messageQueue);
+			runProcessUnitsBlock = new RunProcessUnitsBlock("RPUB", processQueue);
+			runControlUnitBlock = new RunControlUnitBlock("RCUB", messageQueue);
 		}
 
 		public FrameList GetFrameList()
@@ -33,26 +28,24 @@ namespace MLI.Machine
 			return frameList;
 		}
 
-		public void SetExecUnits(List<ExecUnit> execUnits)
+		public void SetProcessUnits(List<ProcessUnit> processUnits)
 		{
-			this.execUnits = execUnits;
-			runExecUnitsBlock.SetExecUnits(execUnits);
+			runProcessUnitsBlock.SetProcessUnits(processUnits);
 		}
 
 		public void SetControlUnit(ControlUnit controlUnit)
 		{
-			this.controlUnit = controlUnit;
 			runControlUnitBlock.SetControlUnit(controlUnit);
 		}
 
-		public void AddMessage(Message message, ExecUnit execUnit)
+		public void AddMessage(Message message, ProcessUnit processUnit)
 		{
-			AddMessages(new List<Message> { message }, execUnit);
+			AddMessages(new List<Message> { message }, processUnit);
 		}
 
-		public void AddMessages(List<Message> messages, ExecUnit execUnit)
+		public void AddMessages(List<Message> messages, ProcessUnit processUnit)
 		{
-			execUnit.SetBusyFlag(false);
+			processUnit.SetBusyFlag(false);
 			foreach (Message message in messages)
 			{
 				messageQueue.Enqueue(message);
@@ -69,38 +62,54 @@ namespace MLI.Machine
 
 		public void TryGiveTasks()
 		{
-			runExecUnitsBlock.RunExecUnits();
+			runProcessUnitsBlock.RunProcessUnits();
 			runControlUnitBlock.RunControlUnit();
 		}
 
-		private class RunExecUnitsBlock : Processor
+		public void CompleteWork()
 		{
-			private List<ExecUnit> execUnits;
+			runProcessUnitsBlock.CompleteWork();
+			runControlUnitBlock.CompleteWork();
+			runProcessUnitsBlock.CompleteProcessUnitsWork();
+			runControlUnitBlock.CompleteControlUnitWork();
+		}
+
+		private class RunProcessUnitsBlock : Processor
+		{
+			private List<ProcessUnit> processUnits;
 			private Queue processQueue;
 
-			public RunExecUnitsBlock(Queue processQueue)
+			public RunProcessUnitsBlock(string id, Queue processQueue) : base(id)
 			{
 				this.processQueue = processQueue;
 			}
 
-			public void SetExecUnits(List<ExecUnit> execUnits)
+			public void SetProcessUnits(List<ProcessUnit> processUnits)
 			{
-				this.execUnits = execUnits;
+				this.processUnits = processUnits;
 			}
 
-			public void RunExecUnits()
+			public void RunProcessUnits()
 			{
 				ReRun();
 			}
 
+			public void CompleteProcessUnitsWork()
+			{
+				foreach (ProcessUnit processUnit in processUnits)
+				{
+					processUnit.CompleteWork();
+				}
+			}
+
 			protected override void Run()
 			{
-				foreach (ExecUnit execUnit in execUnits)
+				foreach (ProcessUnit processUnit in processUnits)
 				{
 					if (processQueue.Count <= 0) break;
-					if (execUnit.IsBusy()) continue;
-					execUnit.SetBusyFlag(true);
-					execUnit.RunProcess((Process)processQueue.Dequeue());
+					if (processUnit.IsBusy()) continue;
+					processUnit.SetBusyFlag(true);
+					processUnit.RunProcess((Process)processQueue.Dequeue());
 				}
 			}
 		}
@@ -110,7 +119,7 @@ namespace MLI.Machine
 			private ControlUnit controlUnit;
 			private Queue messageQueue;
 
-			public RunControlUnitBlock(Queue messageQueue)
+			public RunControlUnitBlock(string id, Queue messageQueue) : base(id)
 			{
 				this.messageQueue = messageQueue;
 			}
@@ -123,6 +132,11 @@ namespace MLI.Machine
 			public void RunControlUnit()
 			{
 				ReRun();
+			}
+
+			public void CompleteControlUnitWork()
+			{
+				controlUnit.CompleteWork();
 			}
 
 			protected override void Run()

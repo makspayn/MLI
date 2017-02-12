@@ -1,20 +1,23 @@
 ﻿using MLI.Data;
 using MLI.Method;
-using NLog;
 
 namespace MLI.Machine
 {
 	public class ControlUnit : Processor
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
-		private WorkSupervisor workSupervisor;
-		private FrameList frameList;
-		Message message;
+		protected Supervisor supervisor;
+		protected FrameList frameList;
+		protected Message message;
 
-		public void SetWorkSupervisor(WorkSupervisor workSupervisor)
+		public ControlUnit(string id) : base(id)
 		{
-			this.workSupervisor = workSupervisor;
-			frameList = workSupervisor.GetFrameList();
+
+		}
+
+		public void SetSupervisor(Supervisor supervisor)
+		{
+			this.supervisor = supervisor;
+			frameList = supervisor.GetFrameList();
 		}
 
 		public void ProcessMessage(Message message)
@@ -34,7 +37,7 @@ namespace MLI.Machine
 				{
 					frameList.AddChild(parentProcess);
 				}
-				workSupervisor.AddProcess(process, this);
+				supervisor.AddProcess(process, this);
 			}
 			else
 			{
@@ -43,17 +46,18 @@ namespace MLI.Machine
 				{
 					if (frameList.DeleteChild(parentProcess))
 					{
-						workSupervisor.AddProcess(parentProcess, this);
+						supervisor.AddProcess(parentProcess, this);
 					}
 					else
 					{
 						SetBusyFlag(false);
-						workSupervisor.TryGiveTasks();
+						supervisor.TryGiveTasks();
 					}
 				}
 				else
 				{
-					//стоп машина
+					supervisor.CompleteWork();
+					Machine.GetInstance().CompleteWork("Логический вывод завершен успешно!");
 				}
 			}
 		}
