@@ -27,6 +27,7 @@ namespace MLI.Forms
 
 		public void MachineCompleteEventHandler(string message)
 		{
+			rtbLog.Lines = LogService.GetLog().ToArray();
 			SwitchState(true);
 			MessageBox.Show(message);
 		}
@@ -100,6 +101,7 @@ namespace MLI.Forms
 			}
 			SwitchState(false);
 			logger.Debug("Запуск машины");
+			LogService.StartLog();
 			machine.Run();
 		}
 

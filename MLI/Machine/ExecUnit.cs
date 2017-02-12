@@ -2,13 +2,11 @@
 using System.Linq;
 using MLI.Data;
 using MLI.Method;
-using NLog;
 
 namespace MLI.Machine
 {
 	public class ExecUnit : ProcessUnit
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private int unifUnitCount;
 		private Supervisor workExecUnitSupervisor;
 		private List<ProcessUnit> unifUnits;
@@ -39,7 +37,7 @@ namespace MLI.Machine
 
 		private void BuildControlUnifUnit()
 		{
-			controlUnifUnit = new ControlUnifUnit($"CCU №1 ({id})", this);
+			controlUnifUnit = new ControlUnifUnit($"CUU №1 ({id})", this);
 		}
 
 		private void ResolveDependencies()
@@ -53,22 +51,14 @@ namespace MLI.Machine
 			controlUnifUnit.SetSupervisor(workExecUnitSupervisor);
 		}
 
-		public new void CompleteWork()
+		public override void CompleteWork()
 		{
 			workExecUnitSupervisor.CompleteWork();
 			base.CompleteWork();
 		}
 
-		protected override void Run()
+		protected override void FormMessages(Process process)
 		{
-			logger.Debug($"На {id} поступил процесс {process.GetName()}");
-			process.Run();
-			FormMessages(process);
-		}
-
-		private void FormMessages(Process process)
-		{
-			logger.Debug($"{id} выполнил процесс {process.GetName()}");
 			if (process.GetStatus() == Process.Status.Progress)
 			{
 				List<Process> childProcesses = process.GetChildProcesses();
@@ -93,23 +83,13 @@ namespace MLI.Machine
 
 		private class UnifUnit : ProcessUnit
 		{
-			private static Logger logger = LogManager.GetCurrentClassLogger();
-
 			public UnifUnit(string id) : base(id)
 			{
 
 			}
 
-			protected override void Run()
+			protected override void FormMessages(Process process)
 			{
-				logger.Debug($"На {id} поступил процесс {process.GetName()}");
-				process.Run();
-				FormMessages(process);
-			}
-
-			private void FormMessages(Process process)
-			{
-				logger.Debug($"{id} выполнил процесс {process.GetName()}");
 				supervisor.AddMessage(
 						new Message(process, Message.MessageType.End), this);
 			}

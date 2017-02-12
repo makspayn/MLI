@@ -17,22 +17,22 @@ namespace MLI.Method
 
 		protected override void FirstRun()
 		{
-			logger.Debug("Запущен Main-процесс");
+			logger.Info("Main-процесс запущен");
 			for (int i = 0; i < 10; i++)
 			{
 				childProcesses.Add(new ProcessU(this));
 			}
 			status = Status.Progress;
 			reentry = true;
-			logger.Debug("Main-процесс завершен");
+			logger.Info("Main-процесс ожидает завершения дочерних процессов");
 		}
 
 		protected override void ReRun()
 		{
-			logger.Debug("Повторно запущен Main-процесс");
+			logger.Info("Main-процесс повторно запущен");
 			childProcesses.Clear();
 			status = Status.Success;
-			logger.Debug("Main-процесс окончательно завершен");
+			logger.Info("Main-процесс завершен");
 		}
 	}
 }

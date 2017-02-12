@@ -1,9 +1,11 @@
 ﻿using System.Threading;
+using NLog;
 
 namespace MLI.Machine
 {
 	public abstract class Processor
 	{
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 		protected string id;
 		private bool busy;
 		private bool complete;
@@ -17,6 +19,7 @@ namespace MLI.Machine
 			semaphore = new Semaphore(0, 1);
 			Thread thread = new Thread(RunInThread) { IsBackground = true };
 			thread.Start();
+			logger.Debug($"{id} создан и запущен");
 		}
 
 		public void SetBusyFlag(bool busy)
@@ -29,10 +32,11 @@ namespace MLI.Machine
 			return busy;
 		}
 
-		public void CompleteWork()
+		public virtual void CompleteWork()
 		{
 			complete = true;
 			ReRun();
+			logger.Debug($"{id} завершил работу");
 		}
 
 		public string GetId() => id;
@@ -56,6 +60,7 @@ namespace MLI.Machine
 			while (!complete)
 			{
 				semaphore.WaitOne();
+				if (complete) return;
 				Run();
 			}
 		}

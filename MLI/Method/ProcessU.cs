@@ -17,9 +17,9 @@ namespace MLI.Method
 
 		protected override void FirstRun()
 		{
-			//logger.Debug($"Запущен U-процесс ({index})");
+			logger.Info($"U-процесс ({index}) запущен");
 			status = Status.Success;
-			//logger.Debug($"U-процесс ({index}) окончательно завершен");
+			logger.Info($"U-процесс ({index}) завершен");
 		}
 
 		protected override void ReRun()

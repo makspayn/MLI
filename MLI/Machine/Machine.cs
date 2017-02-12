@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using MLI.Data;
 using MLI.Forms;
 using MLI.Method;
 using MLI.Services;
 using NLog;
+using Process = MLI.Method.Process;
 
 namespace MLI.Machine
 {
@@ -19,11 +20,13 @@ namespace MLI.Machine
 		private Supervisor workMachineSupervisor;
 		private List<ProcessUnit> execUnits;
 		private ControlUnit controlUnit;
+		private Stopwatch machineWatch;
 
 		public Machine(List<Sequence> facts, List<Sequence> rules, List<Sequence> conclusions)
 		{
 			execUnitCount = SettingsService.ExecUnitCount;
 			unifUnitCount = SettingsService.UnifUnitCount;
+			machineWatch = new Stopwatch();
 			BuildKnowledgeBase(facts, rules, conclusions);
 			BuildWorkMachineSupervisor();
 			BuildExecUnits();
@@ -61,7 +64,7 @@ namespace MLI.Machine
 			execUnits = new List<ProcessUnit>();
 			for (int i = 0; i < execUnitCount; i++)
 			{
-				execUnits.Add(new ExecUnit($"EU №{i + 1} ", unifUnitCount));
+				execUnits.Add(new ExecUnit($"EU №{i + 1}", unifUnitCount));
 			}
 		}
 
@@ -85,27 +88,27 @@ namespace MLI.Machine
 
 		public void Run()
 		{
+			machineWatch.Start();
 			logger.Info("Машина запущена");
-			Task.Run(() =>
-			{
-				Process mainProcess = new MainProcess();
-				workMachineSupervisor.AddMessage(
-					new Message(mainProcess, Message.MessageType.Create), execUnits[0]);
-			});
+			Process mainProcess = new MainProcess();
+			workMachineSupervisor.AddMessage(
+				new Message(mainProcess, Message.MessageType.Create), execUnits[0]);
 		}
 
 		public void Stop()
 		{
-			logger.Info("Машина остановлена");
 			workMachineSupervisor.CompleteWork();
 			CompleteWork("Логический вывод остановлен");
 		}
 
 		public void CompleteWork(string message)
 		{
+			machineWatch.Stop();
+			logger.Info("Машина завершила работу");
 			CompleteEvent machineEvent = new CompleteEvent();
 			machineEvent.machineCompleteEvent += MainForm.GetInstance().MachineCompleteEventHandler;
-			machineEvent.OnMachineCompleteEvent(message);
+			machineEvent.OnMachineCompleteEvent($"{message}\n" +
+			    $"Время работы: {machineWatch.ElapsedMilliseconds} мс");
 		}
 
 		private delegate void MachineCompleteEvent(string message);
