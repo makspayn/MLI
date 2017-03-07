@@ -37,5 +37,10 @@ namespace MLI.Data
 		{
 			return string.Equals(disjunct1.ToString(), disjunct2.ToString());
 		}
+
+		public List<Predicate> GetPredicates()
+		{
+			return predicates;
+		}
 	}
 }

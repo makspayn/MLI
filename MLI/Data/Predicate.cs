@@ -46,5 +46,16 @@ namespace MLI.Data
 		{
 			return string.Equals(predicate1.ToString(), predicate2.ToString());
 		}
+
+		public List<Argument> GetArguments()
+		{
+			return arguments;
+		}
+
+		public static bool CanUnify(Predicate predicate1, Predicate predicate2)
+		{
+			return predicate1.type == predicate2.type && predicate1.name == predicate2.name &&
+			       predicate1.GetArguments().Count == predicate2.GetArguments().Count;
+		}
 	}
 }

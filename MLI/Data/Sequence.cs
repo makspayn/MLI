@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NLog;
 
 namespace MLI.Data
@@ -51,6 +52,16 @@ namespace MLI.Data
 		public static bool Equals(Sequence sequence1, Sequence sequence2)
 		{
 			return string.Equals(sequence1.ToString(), sequence2.ToString());
+		}
+
+		public List<Disjunct> GetDisjuncts()
+		{
+			return disjuncts;
+		}
+
+		public List<Predicate> GetPredicates()
+		{
+			return disjuncts.SelectMany(disjunct => disjunct.GetPredicates()).ToList();
 		}
 	}
 }

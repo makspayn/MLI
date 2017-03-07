@@ -26,7 +26,6 @@
 			this.rtbConclusions = new System.Windows.Forms.RichTextBox();
 			this.rtbLog = new System.Windows.Forms.RichTextBox();
 			this.btnClearLog = new System.Windows.Forms.Button();
-			this.btnSaveLog = new System.Windows.Forms.Button();
 			this.menu = new System.Windows.Forms.MenuStrip();
 			this.menuItemFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemNewFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -130,15 +129,7 @@
 			this.btnClearLog.TabIndex = 8;
 			this.btnClearLog.Text = "Очистить";
 			this.btnClearLog.UseVisualStyleBackColor = true;
-			// 
-			// btnSaveLog
-			// 
-			this.btnSaveLog.Location = new System.Drawing.Point(921, 502);
-			this.btnSaveLog.Name = "btnSaveLog";
-			this.btnSaveLog.Size = new System.Drawing.Size(75, 23);
-			this.btnSaveLog.TabIndex = 9;
-			this.btnSaveLog.Text = "Сохранить";
-			this.btnSaveLog.UseVisualStyleBackColor = true;
+			this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
 			// 
 			// menu
 			// 
@@ -305,7 +296,6 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1008, 537);
-			this.Controls.Add(this.btnSaveLog);
 			this.Controls.Add(this.btnClearLog);
 			this.Controls.Add(this.rtbLog);
 			this.Controls.Add(this.rtbConclusions);
@@ -342,7 +332,6 @@
 		private System.Windows.Forms.RichTextBox rtbConclusions;
 		private System.Windows.Forms.RichTextBox rtbLog;
 		private System.Windows.Forms.Button btnClearLog;
-		private System.Windows.Forms.Button btnSaveLog;
 		private System.Windows.Forms.MenuStrip menu;
 		private System.Windows.Forms.ToolStripMenuItem menuItemFile;
 		private System.Windows.Forms.ToolStripMenuItem menuItemNewFile;

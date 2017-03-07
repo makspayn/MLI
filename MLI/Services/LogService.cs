@@ -10,7 +10,7 @@ namespace MLI.Services
 
 		public static void StartLog()
 		{
-			startLogDate = DateTime.Now;
+			startLogDate = DateTime.Now.AddSeconds(-1);
 		}
 
 		public static List<string> GetLog()
@@ -24,7 +24,7 @@ namespace MLI.Services
 				while (!logReader.EndOfStream)
 				{
 					string str = logReader.ReadLine();
-					if (!canAdd && (str != null && str.StartsWith(startLogDate.Date.ToString("yyyy-MM-dd"))))
+					if (!canAdd && str != null && str.StartsWith(startLogDate.Date.ToString("yyyy-MM-dd")))
 					{
 						DateTime dt = DateTime.Parse(str.Substring(0, 24));
 						canAdd = dt >= startLogDate;

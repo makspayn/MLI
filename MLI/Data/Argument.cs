@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 
@@ -55,6 +56,27 @@ namespace MLI.Data
 		public static bool Equals(Argument argument1, Argument argument2)
 		{
 			return string.Equals(argument1.ToString(), argument2.ToString());
+		}
+
+		public ArgumentType GetArgumentType()
+		{
+			return type;
+		}
+
+		public List<Argument> GetArguments()
+		{
+			return arguments ?? new List<Argument>();
+		}
+
+		public static bool Contains(Argument argument, List<Argument> arguments)
+		{
+			return arguments.Any(arg => Equals(arg, argument) || Contains(arg, arg.GetArguments()));
+		}
+
+		public static bool CanUnify(Argument argument1, Argument argument2)
+		{
+			return argument1.type == argument2.type && argument1.name == argument2.name &&
+				   argument1.GetArguments().Count == argument2.GetArguments().Count;
 		}
 
 		public static List<Argument> ParseArguments(string arguments)

@@ -16,6 +16,16 @@ namespace MLI.Method
 		protected string name;
 		protected string index;
 
+		protected Process(Process parentProcess, int index)
+		{
+			this.parentProcess = parentProcess;
+			this.index = index.ToString();
+			if (!string.IsNullOrEmpty(parentProcess?.GetIndex()))
+			{
+				this.index = $"{parentProcess.GetIndex()}.{index}";
+			}
+		}
+
 		public void Run()
 		{
 			if (!reentry)
@@ -50,6 +60,11 @@ namespace MLI.Method
 		public bool GetReentry()
 		{
 			return reentry;
+		}
+
+		public string GetIndex()
+		{
+			return index;
 		}
 
 		public string GetName()

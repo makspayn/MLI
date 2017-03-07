@@ -146,6 +146,11 @@ namespace MLI.Forms
 			AboutForm.ShowForm();
 		}
 
+		private void btnClearLog_Click(object sender, EventArgs e)
+		{
+			rtbLog.Clear();
+		}
+
 		private void ReadKnowledgeBase()
 		{
 			rtbFacts.Lines = KnowledgeBase.Facts.ToArray();
