@@ -34,6 +34,7 @@ namespace MLI.Services
 						log.Add(str);
 					}
 				}
+				logReader.Close();
 			}
 			catch
 			{
