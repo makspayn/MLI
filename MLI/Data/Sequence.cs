@@ -63,5 +63,10 @@ namespace MLI.Data
 		{
 			return disjuncts.SelectMany(disjunct => disjunct.GetPredicates()).ToList();
 		}
+
+		public string GetContent()
+		{
+			return string.Join(separator, disjuncts);
+		}
 	}
 }

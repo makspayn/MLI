@@ -7,10 +7,16 @@ namespace MLI.Method
 {
 	public class ProcessU : Process
 	{
+		public enum ProcessUStatus
+		{
+			Absolute, Complete, Failure
+		}
+
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private Predicate predicate1;
 		private Predicate predicate2;
 		private Substitution substitution = new Substitution();
+		private ProcessUStatus processUStatus;
 
 		public ProcessU(Process parentProcess, int index, Predicate predicate1, Predicate predicate2) : base(parentProcess, index)
 		{
@@ -24,22 +30,23 @@ namespace MLI.Method
 		{
 			logger.Info($"[{GetName()}]: процесс запущен");
 			logger.Info($"[{GetName()}]: унификация {predicate1} и {predicate2}");
-			status = Predicate.CanUnify(predicate1, predicate2) ? 
-				(Predicate.Equals(predicate1, predicate2) ? Status.Success : 
-				GetUnificator(predicate1.GetArguments(), predicate2.GetArguments())) : 
-				Status.Failure;
-			switch (status)
+			processUStatus = Predicate.CanUnify(predicate1, predicate2) ? 
+				(Predicate.Equals(predicate1, predicate2) ? ProcessUStatus.Absolute : 
+				GetUnificator(predicate1.GetArguments(), predicate2.GetArguments())) :
+				ProcessUStatus.Failure;
+			switch (processUStatus)
 			{
-				case Status.Success:
+				case ProcessUStatus.Absolute:
 					logger.Info($"[{GetName()}]: унификация выполнена полностью");
 					break;
-				case Status.Progress:
+				case ProcessUStatus.Complete:
 					logger.Info($"[{GetName()}]: унификация выполнена. Унификатор: {{ {substitution.GetSubstitutions()}}}");
 					break;
-				case Status.Failure:
+				case ProcessUStatus.Failure:
 					logger.Info($"[{GetName()}]: унификация невозможна");
 					break;
 			}
+			status = Status.Complete;
 			logger.Info($"[{GetName()}]: процесс завершен");
 		}
 
@@ -47,9 +54,9 @@ namespace MLI.Method
 		{
 		}
 
-		private Status GetUnificator(List<Argument> arguments1, List<Argument> arguments2)
+		private ProcessUStatus GetUnificator(List<Argument> arguments1, List<Argument> arguments2)
 		{
-			Status status = Status.Progress;
+			ProcessUStatus status = ProcessUStatus.Complete;
 			for (int i = 0; i < arguments1.Count; i++)
 			{
 				switch (arguments1[i].GetArgumentType())
@@ -64,7 +71,7 @@ namespace MLI.Method
 								status = GetUnificatorConstantAndVariable(arguments1[i], arguments2[i]);
 								break;
 							case ArgumentType.Functor:
-								status = Status.Failure;
+								status = ProcessUStatus.Failure;
 								break;
 						}
 						break;
@@ -86,7 +93,7 @@ namespace MLI.Method
 						switch (arguments2[i].GetArgumentType())
 						{
 							case ArgumentType.Constant:
-								status = Status.Failure;
+								status = ProcessUStatus.Failure;
 								break;
 							case ArgumentType.Variable:
 								status = GetUnificatorVariableAndFunctor(arguments2[i], arguments1[i]);
@@ -97,7 +104,7 @@ namespace MLI.Method
 						}
 						break;
 				}
-				if (status == Status.Failure)
+				if (status == ProcessUStatus.Failure)
 				{
 					break;
 				}
@@ -105,19 +112,19 @@ namespace MLI.Method
 			return status;
 		}
 
-		private Status GetUnificatorConstantAndConstant(Argument constant1, Argument constant2)
+		private ProcessUStatus GetUnificatorConstantAndConstant(Argument constant1, Argument constant2)
 		{
-			return Argument.Equals(constant1, constant2) ? Status.Progress : Status.Failure;
+			return Argument.Equals(constant1, constant2) ? ProcessUStatus.Complete : ProcessUStatus.Failure;
 		}
 
-		private Status GetUnificatorConstantAndVariable(Argument constant, Argument variable)
+		private ProcessUStatus GetUnificatorConstantAndVariable(Argument constant, Argument variable)
 		{
 			substitution.AddSubstitution(variable, constant);
 			DoUnification();
-			return Status.Progress;
+			return ProcessUStatus.Complete;
 		}
 
-		private Status GetUnificatorVariableAndVariable(Argument variable1, Argument variable2)
+		private ProcessUStatus GetUnificatorVariableAndVariable(Argument variable1, Argument variable2)
 		{
 			if (!Argument.Equals(variable1, variable2))
 			{
@@ -131,26 +138,26 @@ namespace MLI.Method
 				}
 				DoUnification();
 			}
-			return Status.Progress;
+			return ProcessUStatus.Complete;
 		}
 
-		private Status GetUnificatorVariableAndFunctor(Argument variable, Argument functor)
+		private ProcessUStatus GetUnificatorVariableAndFunctor(Argument variable, Argument functor)
 		{
 			if (Argument.Contains(variable, functor.GetArguments()))
 			{
-				return Status.Failure;
+				return ProcessUStatus.Failure;
 			}
 			substitution.AddSubstitution(variable, functor);
 			DoUnification();
-			return Status.Progress;
+			return ProcessUStatus.Complete;
 		}
 
-		private Status GetUnificatorFunctorAndFunctor(Argument functor1, Argument functor2)
+		private ProcessUStatus GetUnificatorFunctorAndFunctor(Argument functor1, Argument functor2)
 		{
 			return Argument.CanUnify(functor1, functor2) ? 
-				(Argument.Equals(functor1, functor2) ? 
-				Status.Progress : GetUnificator(functor1.GetArguments(), functor2.GetArguments())) : 
-				Status.Failure;
+				(Argument.Equals(functor1, functor2) ?
+				ProcessUStatus.Complete : GetUnificator(functor1.GetArguments(), functor2.GetArguments())) :
+				ProcessUStatus.Failure;
 		}
 
 		private void DoUnification()
@@ -173,7 +180,17 @@ namespace MLI.Method
 				}
 				Unify(arguments[i].GetArguments(), substitution);
 			}
-		} 
+		}
+
+		public Substitution GetSubstitution()
+		{
+			return substitution;
+		}
+
+		public ProcessUStatus GetProcessUStatus()
+		{
+			return processUStatus;
+		}
 
 		public class Substitution
 		{

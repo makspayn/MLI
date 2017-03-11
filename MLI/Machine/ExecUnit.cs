@@ -125,6 +125,7 @@ namespace MLI.Machine
 					if (frameList.DeleteChild(parentProcess))
 					{
 						frameList.DeleteFrame(parentProcess);
+						SetBusyFlag(false);
 						execUnit.RunProcess(parentProcess);
 					}
 					else

@@ -121,6 +121,7 @@
     <Compile Include="Machine\Processor.cs" />
     <Compile Include="Machine\ProcessUnit.cs" />
     <Compile Include="Machine\Supervisor.cs" />
+    <Compile Include="Method\ProcessM.cs" />
     <Compile Include="Method\Process.cs" />
     <Compile Include="Method\MainProcess.cs" />
     <Compile Include="Method\ProcessU.cs" />

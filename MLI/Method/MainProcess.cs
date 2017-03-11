@@ -1,4 +1,6 @@
-﻿using MLI.Data;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MLI.Data;
 using NLog;
 using KnowledgeBase = MLI.Machine.KnowledgeBase;
 
@@ -21,19 +23,9 @@ namespace MLI.Method
 		protected override void FirstRun()
 		{
 			logger.Info($"[{GetName()}]: процесс запущен");
-			int i = 1;
 			foreach (Sequence rule in knowledgeBase.rules)
 			{
-				foreach (Sequence conclusion in knowledgeBase.conclusions)
-				{
-					foreach (Predicate rulePredicate in rule.GetPredicates())
-					{
-						foreach (Predicate conclusionPredicate in conclusion.GetPredicates())
-						{
-							childProcesses.Add(new ProcessU(this, i++, rulePredicate, conclusionPredicate));
-						}
-					}
-				}
+				childProcesses.Add(new ProcessM(this, childProcessCount++, rule, knowledgeBase.conclusions, false));
 			}
 			status = Status.Progress;
 			reentry = true;
@@ -43,9 +35,29 @@ namespace MLI.Method
 		protected override void ReRun()
 		{
 			logger.Info($"[{GetName()}]: процесс повторно запущен");
+			List<Process> newChildProcesses = new List<Process>();
+			foreach (ProcessM childProcess in childProcesses.Cast<ProcessM>())
+			{
+				if (childProcess.GetProcessMStatus() == ProcessM.ProcessMStatus.RestsExist)
+				{
+					foreach (Sequence rest in childProcess.GetRests())
+					{
+						newChildProcesses.Add(new ProcessM(this, childProcessCount++, rest, knowledgeBase.facts, true));
+					}
+				}
+			}
 			childProcesses.Clear();
-			status = Status.Success;
-			logger.Info($"[{GetName()}]: процесс завершен");
+			childProcesses.AddRange(newChildProcesses);
+			if (childProcesses.Count == 0)
+			{
+				status = Status.Complete;
+				logger.Info($"[{GetName()}]: процесс завершен");
+			}
+			else
+			{
+				status = Status.Progress;
+				logger.Info($"[{GetName()}]: ожидание завершения дочерних процессов");
+			}
 		}
 	}
 }

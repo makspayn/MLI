@@ -57,5 +57,10 @@ namespace MLI.Data
 			return predicate1.type == predicate2.type && predicate1.name == predicate2.name &&
 			       predicate1.GetArguments().Count == predicate2.GetArguments().Count;
 		}
+
+		public static Predicate GetInversPredicate(Predicate predicate)
+		{
+			return new Predicate(predicate.ToString()) {type = !predicate.type};
+		}
 	}
 }

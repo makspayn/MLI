@@ -6,7 +6,7 @@ namespace MLI.Method
 	{
 		public enum Status
 		{
-			Success, Progress, Failure
+			Progress, Complete
 		}
 
 		protected Process parentProcess;
@@ -15,6 +15,7 @@ namespace MLI.Method
 		protected bool reentry;
 		protected string name;
 		protected string index;
+		protected int childProcessCount;
 
 		protected Process(Process parentProcess, int index)
 		{
@@ -24,6 +25,7 @@ namespace MLI.Method
 			{
 				this.index = $"{parentProcess.GetIndex()}.{index}";
 			}
+			childProcessCount = 0;
 		}
 
 		public void Run()
