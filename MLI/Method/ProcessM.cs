@@ -46,7 +46,7 @@ namespace MLI.Method
 			{
 				foreach (Predicate predicate in predicates)
 				{
-					childProcesses.Add(new ProcessU(this, childProcessCount++, rulePredicate, predicate));
+					childProcesses.Add(new ProcessU(this, ++childProcessCount, rulePredicate, predicate));
 				}
 			}
 			status = Status.Progress;
@@ -89,7 +89,7 @@ namespace MLI.Method
 					logger.Info($"[{GetName()}]: получены остатки:\n{GetFormatRests()}");
 					break;
 				case ProcessMStatus.OnesMatrix:
-					rests.Add(new Sequence(ruleSequence.ToString(), Sequence.SequenceType.Rule));
+					rests.Add(new Sequence(ruleSequence.ToString()));
 					logger.Info($"[{GetName()}]: получена единичная матрица. Остаток: {rests[0].GetContent()}");
 					break;
 			}
@@ -113,7 +113,7 @@ namespace MLI.Method
 					rest += rulePredicate.ToString();
 				}
 			}
-			return new Sequence(rest, Sequence.SequenceType.Rule);
+			return new Sequence(rest);
 		}
 
 		private string GetFormatRests()

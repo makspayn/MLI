@@ -184,7 +184,7 @@ namespace MLI.Forms
 			{
 				if (KnowledgeBase.Facts.Count != 0)
 				{
-					facts.AddRange(KnowledgeBase.Facts.Select(fact => new Sequence(fact, Sequence.SequenceType.Fact)));
+					facts.AddRange(KnowledgeBase.Facts.Select(fact => new Sequence(fact)));
 				}
 				else
 				{
@@ -200,7 +200,7 @@ namespace MLI.Forms
 			{
 				if (KnowledgeBase.Rules.Count != 0)
 				{
-					rules.AddRange(KnowledgeBase.Rules.Select(rule => new Sequence(rule, Sequence.SequenceType.Rule)));
+					rules.AddRange(KnowledgeBase.Rules.Select(rule => new Sequence(rule)));
 				}
 				else
 				{
@@ -216,7 +216,7 @@ namespace MLI.Forms
 			{
 				if (KnowledgeBase.Rules.Count != 0)
 				{
-					conclusions.AddRange(KnowledgeBase.Conclusions.Select(conclusion => new Sequence(conclusion, Sequence.SequenceType.Conclusion)));
+					conclusions.AddRange(KnowledgeBase.Conclusions.Select(conclusion => new Sequence(conclusion)));
 				}
 				else
 				{

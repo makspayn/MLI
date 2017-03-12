@@ -42,5 +42,10 @@ namespace MLI.Data
 		{
 			return predicates;
 		}
+
+		public static Disjunct Multiply(List<Disjunct> disjuncts)
+		{
+			return new Disjunct(string.Join(separator, disjuncts));
+		}
 	}
 }

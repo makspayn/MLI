@@ -7,24 +7,17 @@ namespace MLI.Data
 {
 	public class Sequence
 	{
-		public enum SequenceType
-		{
-			Fact, Rule, Conclusion
-		}
-
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static string start = "1 -> ";
 		private static string separator = " v ";
-		private SequenceType type;
 		private List<Disjunct> disjuncts;
 
-		public Sequence(string sequence, SequenceType type)
+		public Sequence(string sequence)
 		{
 			try
 			{
 				if (sequence.StartsWith(start))
 				{
-					this.type = type;
 					string[] disjunctStrings = sequence.Substring(start.Length).Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries);
 					disjuncts = new List<Disjunct>();
 					foreach (string disjunctString in disjunctStrings)
@@ -67,6 +60,25 @@ namespace MLI.Data
 		public string GetContent()
 		{
 			return string.Join(separator, disjuncts);
+		}
+
+		public static Sequence Minimize(Sequence sequence)
+		{
+			return sequence;
+		}
+
+		public static Sequence Multiply(List<Sequence> sequences)
+		{
+			Sequence sequence = new Sequence(sequences[0].ToString());
+			sequences.RemoveAt(0);
+			return sequences.Aggregate(sequence, Multiply);
+		}
+
+		private static Sequence Multiply(Sequence sequence1, Sequence sequence2)
+		{
+			List<Disjunct> disjuncts = (from disj1 in sequence1.GetDisjuncts() from disj2 in sequence2.GetDisjuncts()
+										select Disjunct.Multiply(new List<Disjunct> {disj1, disj2})).ToList();
+			return new Sequence(start + string.Join(separator, disjuncts));
 		}
 	}
 }

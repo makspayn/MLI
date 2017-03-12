@@ -25,7 +25,6 @@ namespace MLI.Method
 			{
 				this.index = $"{parentProcess.GetIndex()}.{index}";
 			}
-			childProcessCount = 0;
 		}
 
 		public void Run()
