@@ -80,19 +80,7 @@ namespace MLI.Method
 					ProcessMStatus.ZeroRest : ProcessMStatus.OnesMatrix;
 			}
 			childProcesses.Clear();
-			switch (processMStatus)
-			{
-				case ProcessMStatus.ZeroRest:
-					logger.Info($"[{GetName()}]: получен нулевой остаток");
-					break;
-				case ProcessMStatus.RestsExist:
-					logger.Info($"[{GetName()}]: получены остатки:\n{GetFormatRests()}");
-					break;
-				case ProcessMStatus.OnesMatrix:
-					rests.Add(new Sequence(ruleSequence.ToString()));
-					logger.Info($"[{GetName()}]: получена единичная матрица. Остаток: {rests[0].GetContent()}");
-					break;
-			}
+			PrintStatus();
 			status = Status.Complete;
 			logger.Info($"[{GetName()}]: процесс завершен");
 		}
@@ -118,13 +106,26 @@ namespace MLI.Method
 
 		private string GetFormatRests()
 		{
-			StringBuilder sb = new StringBuilder();
 			int i = 1;
-			foreach (Sequence rest in rests)
+			List<string> restList = rests.Select(rest => $"{i++}) {rest.GetContent()}").ToList();
+			return string.Join("\n", restList);
+		}
+
+		private void PrintStatus()
+		{
+			switch (processMStatus)
 			{
-				sb.Append($"{i++}) {rest.GetContent()}\n");
+				case ProcessMStatus.ZeroRest:
+					logger.Info($"[{GetName()}]: получен нулевой остаток");
+					break;
+				case ProcessMStatus.RestsExist:
+					logger.Info($"[{GetName()}]: получены остатки:\n{GetFormatRests()}");
+					break;
+				case ProcessMStatus.OnesMatrix:
+					rests.Add(new Sequence(ruleSequence.ToString()));
+					logger.Info($"[{GetName()}]: получена единичная матрица. Остаток: {rests[0].GetContent()}");
+					break;
 			}
-			return sb.ToString();
 		}
 
 		public ProcessMStatus GetProcessMStatus()

@@ -34,6 +34,17 @@ namespace MLI.Method
 				(Predicate.Equals(predicate1, predicate2) ? ProcessUStatus.Absolute : 
 				GetUnificator(predicate1.GetArguments(), predicate2.GetArguments())) :
 				ProcessUStatus.Failure;
+			PrintStatus();
+			status = Status.Complete;
+			logger.Info($"[{GetName()}]: процесс завершен");
+		}
+
+		protected override void ReRun()
+		{
+		}
+
+		private void PrintStatus()
+		{
 			switch (processUStatus)
 			{
 				case ProcessUStatus.Absolute:
@@ -46,12 +57,6 @@ namespace MLI.Method
 					logger.Info($"[{GetName()}]: унификация невозможна");
 					break;
 			}
-			status = Status.Complete;
-			logger.Info($"[{GetName()}]: процесс завершен");
-		}
-
-		protected override void ReRun()
-		{
 		}
 
 		private ProcessUStatus GetUnificator(List<Argument> arguments1, List<Argument> arguments2)

@@ -1,5 +1,4 @@
-﻿using MLI.Data;
-using NLog;
+﻿using NLog;
 using KnowledgeBase = MLI.Machine.KnowledgeBase;
 
 namespace MLI.Method
@@ -21,10 +20,7 @@ namespace MLI.Method
 		protected override void FirstRun()
 		{
 			logger.Info($"[{GetName()}]: процесс запущен");
-			foreach (Sequence rule in knowledgeBase.rules)
-			{
-				childProcesses.Add(new ProcessN(this, ++childProcessCount, knowledgeBase.facts, rule, knowledgeBase.conclusions[0]));
-			}
+			childProcesses.Add(new ProcessV(this, ++childProcessCount, knowledgeBase.facts, knowledgeBase.rules, knowledgeBase.conclusions[0]));
 			status = Status.Progress;
 			reentry = true;
 			logger.Info($"[{GetName()}]: ожидание завершения дочерних процессов");

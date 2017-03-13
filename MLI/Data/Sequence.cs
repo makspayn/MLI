@@ -7,6 +7,11 @@ namespace MLI.Data
 {
 	public class Sequence
 	{
+		public enum SequenceState
+		{
+			Sequence, One, Zero
+		}
+
 		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static string start = "1 -> ";
 		private static string separator = " v ";
@@ -65,6 +70,14 @@ namespace MLI.Data
 		public static Sequence Minimize(Sequence sequence)
 		{
 			return sequence;
+		}
+
+		public static SequenceState GetSequenceState(Sequence sequence)
+		{
+			return sequence == null ? SequenceState.One : 
+				sequence.GetDisjuncts().Count == 0 ? 
+				SequenceState.Zero : 
+				SequenceState.Sequence;
 		}
 
 		public static Sequence Multiply(List<Sequence> sequences)
