@@ -153,5 +153,10 @@ namespace MLI.Method
 		{
 			return processVStatus;
 		}
+
+		public Sequence GetRest()
+		{
+			return rest;
+		}
 	}
 }

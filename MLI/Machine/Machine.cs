@@ -90,7 +90,7 @@ namespace MLI.Machine
 		{
 			machineWatch.Start();
 			logger.Info("Машина запущена");
-			Process mainProcess = new MainProcess(null, 0, knowledgeBase);
+			Process mainProcess = new MainProcess(null, 0, knowledgeBase.facts, knowledgeBase.rules, knowledgeBase.conclusions[0]);
 			workMachineSupervisor.AddMessage(
 				new Message(mainProcess, Message.MessageType.Create), execUnits[0]);
 		}
