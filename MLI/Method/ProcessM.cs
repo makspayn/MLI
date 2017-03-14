@@ -42,9 +42,9 @@ namespace MLI.Method
 		{
 			logger.Info($"[{GetName()}]: процесс запущен");
 			logger.Info($"[{GetName()}]: правило {ruleSequence}");
-			foreach (Predicate rulePredicate in rulePredicates)
+			foreach (Predicate predicate in predicates)
 			{
-				foreach (Predicate predicate in predicates)
+				foreach (Predicate rulePredicate in rulePredicates)
 				{
 					childProcesses.Add(new ProcessU(this, ++childProcessCount, rulePredicate, predicate));
 				}
@@ -62,10 +62,12 @@ namespace MLI.Method
 			if (restCount > 0)
 			{
 				processMStatus = ProcessMStatus.RestsExist;
-				foreach (ProcessU childProcess in childProcesses.Cast<ProcessU>().Where(
-					childProcess => childProcess.GetProcessUStatus() == ProcessU.ProcessUStatus.Complete))
+				for (int i = 0; i < childProcesses.Count; i++)
 				{
-					rests.Add(FormRest(childProcess.GetSubstitution(), childProcesses.IndexOf(childProcess) % rulePredicates.Count));
+					if (((ProcessU) childProcesses[i]).GetProcessUStatus() == ProcessU.ProcessUStatus.Complete)
+					{
+						rests.Add(FormRest(((ProcessU)childProcesses[i]).GetSubstitution(), i % rulePredicates.Count));
+					}
 				}
 				if (rests.Any(rest => rest.GetDisjuncts().Count == 0))
 				{
