@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MLI.Data;
+using MLI.Services;
 using NLog;
 
 namespace MLI.Method
@@ -12,8 +13,7 @@ namespace MLI.Method
 		{
 			ZeroRest, RestExists, NoRest
 		}
-
-		private static Logger logger = LogManager.GetCurrentClassLogger();
+		
 		private List<Sequence> facts;
 		private Sequence ruleSequence;
 		private Sequence conclusionSequence;
@@ -24,25 +24,26 @@ namespace MLI.Method
 		{
 			reentry = false;
 			name = "N";
+			inputData = $"правило {ruleSequence}";
 			this.facts = facts;
 			this.ruleSequence = ruleSequence;
 			this.conclusionSequence = conclusionSequence;
-			logger.Debug($"[{GetName()}]: создан процесс");
+			LogService.Debug(LogService.InfoLevel.ProcessN, $"[{GetFullName()}]: создан процесс");
 		}
 
 		protected override void FirstRun()
 		{
-			logger.Info($"[{GetName()}]: процесс запущен");
-			logger.Info($"[{GetName()}]: правило {ruleSequence}");
+			Log("процесс запущен");
+			Log(inputData);
 			childProcesses.Add(new ProcessM(this, ++childProcessCount, ruleSequence, new List<Sequence>() { conclusionSequence }, false));
 			status = Status.Progress;
 			reentry = true;
-			logger.Info($"[{GetName()}]: ожидание завершения дочерних процессов");
+			Log("ожидание завершения дочерних процессов");
 		}
 
 		protected override void ReRun()
 		{
-			logger.Info($"[{GetName()}]: процесс повторно запущен");
+			Log("процесс повторно запущен");
 			List<Process> newChildProcesses = new List<Process>();
 			if (childProcesses.Cast<ProcessM>()
 				.All(childProcess => childProcess.GetProcessMStatus() != ProcessM.ProcessMStatus.ZeroRest))
@@ -91,13 +92,13 @@ namespace MLI.Method
 			if (childProcesses.Count != 0)
 			{
 				status = Status.Progress;
-				logger.Info($"[{GetName()}]: ожидание завершения дочерних процессов");
+				Log("ожидание завершения дочерних процессов");
 			}
 			else
 			{
 				PrintStatus();
 				status = Status.Complete;
-				logger.Info($"[{GetName()}]: процесс завершен");
+				Log("процесс завершен");
 			}
 		}
 
@@ -117,15 +118,24 @@ namespace MLI.Method
 			switch (processNStatus)
 			{
 				case ProcessNStatus.ZeroRest:
-					logger.Info($"[{GetName()}]: получен нулевой остаток");
+					statusData = "получен нулевой остаток";
+					Log(statusData);
 					break;
 				case ProcessNStatus.RestExists:
-					logger.Info($"[{GetName()}]: получен конечный остаток: {rest?.GetContent()}");
+					statusData = "получен конечный остаток";
+					resultData = $"Остаток: {rest?.GetContent()}";
+					Log($"{statusData}: {rest?.GetContent()}");
 					break;
 				case ProcessNStatus.NoRest:
-					logger.Info($"[{GetName()}]: конечного остатка не получено");
+					statusData = "конечного остатка не получено";
+					Log(statusData);
 					break;
 			}
+		}
+
+		private void Log(string message)
+		{
+			LogService.Info(LogService.InfoLevel.ProcessN, $"[{GetFullName()}]: {message}");
 		}
 
 		public ProcessNStatus GetProcessNStatus()

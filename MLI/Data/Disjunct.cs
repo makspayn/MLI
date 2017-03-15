@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using NLog;
+using MLI.Services;
 
 namespace MLI.Data
 {
 	public class Disjunct
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static string separator = " & ";
 		private List<Predicate> predicates;
 
@@ -23,7 +22,7 @@ namespace MLI.Data
 			}
 			catch (Exception exception)
 			{
-				logger.Error($"Некорректный дизъюнкт: {disjunct}");
+				LogService.Error($"Некорректный дизъюнкт: {disjunct}");
 				throw new Exception($"Некорректный дизъюнкт: {disjunct}\n" + exception.Message);
 			}
 		}

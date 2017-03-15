@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using NLog;
+using MLI.Services;
 
 namespace MLI.Data
 {
 	public class Predicate
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static Regex rgxPredicate = new Regex(@"^[-+][A-Z][a-zA-Z0-9]*\([^\s]*\)$");
 		private static string separator = ",";
 		private bool type;
@@ -32,7 +31,7 @@ namespace MLI.Data
 			}
 			catch (Exception exception)
 			{
-				logger.Error($"Некорректный предикат: {predicate}");
+				LogService.Error($"Некорректный предикат: {predicate}");
 				throw new Exception($"Некорректный предикат: {predicate}\n" + exception.Message);
 			}
 		}

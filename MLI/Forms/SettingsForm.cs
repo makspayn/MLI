@@ -1,12 +1,10 @@
 ﻿using System.Windows.Forms;
 using MLI.Services;
-using NLog;
 
 namespace MLI.Forms
 {
 	public partial class SettingsForm : Form
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static SettingsForm instance;
 
 		private SettingsForm()
@@ -42,16 +40,16 @@ namespace MLI.Forms
 			numTickLength.Value = SettingsService.TickLength;
 			switch (SettingsService.InfoLevel)
 			{
-				case 0:
+				case LogService.InfoLevel.ProcessV:
 					rbV.Checked = true;
 					break;
-				case 1:
+				case LogService.InfoLevel.ProcessN:
 					rbN.Checked = true;
 					break;
-				case 2:
+				case LogService.InfoLevel.ProcessM:
 					rbM.Checked = true;
 					break;
-				case 3:
+				case LogService.InfoLevel.ProcessU:
 					rbU.Checked = true;
 					break;
 			}
@@ -62,11 +60,11 @@ namespace MLI.Forms
 			SettingsService.ExecUnitCount = (int)numExecUnitCount.Value;
 			SettingsService.UnifUnitCount = (int)numUnifUnitCount.Value;
 			SettingsService.TickLength = (int)numTickLength.Value;
-			if (rbV.Checked) SettingsService.InfoLevel = 0;
-			if (rbN.Checked) SettingsService.InfoLevel = 1;
-			if (rbM.Checked) SettingsService.InfoLevel = 2;
-			if (rbU.Checked) SettingsService.InfoLevel = 3;
-			logger.Info("Установлены новые настройки:\n" +
+			if (rbV.Checked) SettingsService.InfoLevel = LogService.InfoLevel.ProcessV;
+			if (rbN.Checked) SettingsService.InfoLevel = LogService.InfoLevel.ProcessN;
+			if (rbM.Checked) SettingsService.InfoLevel = LogService.InfoLevel.ProcessM;
+			if (rbU.Checked) SettingsService.InfoLevel = LogService.InfoLevel.ProcessU;
+			LogService.Info("Установлены новые настройки:\n" +
 				$"Число исполнительных блоков: {SettingsService.ExecUnitCount}\n" +
 				$"Число блоков унификации: {SettingsService.UnifUnitCount}\n" +
 				$"Длина такта (нс): {SettingsService.TickLength}\n" +

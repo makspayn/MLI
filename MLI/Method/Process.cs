@@ -16,6 +16,9 @@ namespace MLI.Method
 		protected string name;
 		protected string index;
 		protected int childProcessCount;
+		protected string inputData;
+		protected string statusData;
+		protected string resultData;
 
 		protected Process(Process parentProcess, int index)
 		{
@@ -63,14 +66,34 @@ namespace MLI.Method
 			return reentry;
 		}
 
+		public string GetName()
+		{
+			return name;
+		}
+
 		public string GetIndex()
 		{
 			return index;
 		}
 
-		public string GetName()
+		public string GetFullName()
 		{
 			return name + index;
+		}
+
+		public string GetInputData()
+		{
+			return inputData;
+		}
+
+		public string GetStatusData()
+		{
+			return statusData;
+		}
+
+		public string GetResultData()
+		{
+			return resultData;
 		}
 	}
 }

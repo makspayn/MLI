@@ -1,11 +1,10 @@
 ﻿using MLI.Method;
-using NLog;
+using MLI.Services;
 
 namespace MLI.Machine
 {
 	public abstract class ProcessUnit : Processor
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
 		protected Supervisor supervisor;
 		protected Process process;
 
@@ -27,9 +26,10 @@ namespace MLI.Machine
 
 		protected override void Run()
 		{
-			logger.Debug($"На {id} поступил процесс {process.GetName()}");
+			LogService.Debug($"На {id} поступил процесс {process.GetFullName()}");
 			process.Run();
-			logger.Debug($"{id} выполнил процесс {process.GetName()}");
+			LogService.Debug($"{id} выполнил процесс {process.GetFullName()}");
+			StatisticsService.Add(process, this);
 			FormMessages(process);
 		}
 

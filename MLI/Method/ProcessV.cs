@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MLI.Data;
-using NLog;
+using MLI.Services;
 
 namespace MLI.Method
 {
@@ -11,8 +11,7 @@ namespace MLI.Method
 		{
 			Success, Failure, Progress
 		}
-
-		private static Logger logger = LogManager.GetCurrentClassLogger();
+		
 		private List<Sequence> facts;
 		private List<Sequence> rules;
 		private Sequence conclusionSequence;
@@ -23,40 +22,41 @@ namespace MLI.Method
 		{
 			reentry = false;
 			name = "V";
+			inputData = $"выводимое правило {conclusionSequence}";
 			this.facts = facts;
 			this.rules = rules;
 			this.conclusionSequence = conclusionSequence;
-			logger.Debug($"[{GetName()}]: создан процесс");
+			LogService.Debug(LogService.InfoLevel.ProcessV, $"[{GetFullName()}]: создан процесс");
 		}
 
 		protected override void FirstRun()
 		{
-			logger.Info($"[{GetName()}]: процесс запущен");
-			logger.Info($"[{GetName()}]: выводимое правило {conclusionSequence}");
+			Log("процесс запущен");
+			Log(inputData);
 			if (CanInference())
 			{
-				logger.Info($"[{GetName()}]: вывод может быть осуществим");
+				Log("вывод может быть осуществим");
 				foreach (Sequence rule in rules)
 				{
 					childProcesses.Add(new ProcessN(this, ++childProcessCount, facts, rule, conclusionSequence));
 				}
 				status = Status.Progress;
 				reentry = true;
-				logger.Info($"[{GetName()}]: ожидание завершения дочерних процессов");
+				Log("ожидание завершения дочерних процессов");
 			}
 			else
 			{
-				logger.Info($"[{GetName()}]: вывод не может быть осуществим");
+				Log("вывод не может быть осуществим");
 				processVStatus = ProcessVStatus.Failure;
 				PrintStatus();
 				status = Status.Complete;
-				logger.Info($"[{GetName()}]: процесс завершен");
+				Log("процесс завершен");
 			}
 		}
 
 		protected override void ReRun()
 		{
-			logger.Info($"[{GetName()}]: процесс повторно запущен");
+			Log("процесс повторно запущен");
 			if (childProcesses.Cast<ProcessN>()
 				.All(childProcess => childProcess.GetProcessNStatus() != ProcessN.ProcessNStatus.ZeroRest))
 			{
@@ -95,7 +95,7 @@ namespace MLI.Method
 			}
 			PrintStatus();
 			status = Status.Complete;
-			logger.Info($"[{GetName()}]: процесс завершен");
+			Log("процесс завершен");
 		}
 
 		private bool CanInference()
@@ -138,15 +138,24 @@ namespace MLI.Method
 			switch (processVStatus)
 			{
 				case ProcessVStatus.Success:
-					logger.Info($"[{GetName()}]: вывод завершен успешно");
+					statusData = "вывод завершен успешно";
+					Log(statusData);
 					break;
 				case ProcessVStatus.Progress:
-					logger.Info($"[{GetName()}]: требуется продолжение вывода. Остаток: {rest.GetContent()}");
+					statusData = "требуется продолжение вывода";
+					resultData = $"Остаток: {rest.GetContent()}";
+					Log($"{statusData}. {resultData}");
 					break;
 				case ProcessVStatus.Failure:
-					logger.Info($"[{GetName()}]: вывод завершен неудачно");
+					statusData = "вывод завершен неудачно";
+					Log(statusData);
 					break;
 			}
+		}
+
+		private void Log(string message)
+		{
+			LogService.Info(LogService.InfoLevel.ProcessV, $"[{GetFullName()}]: {message}");
 		}
 
 		public ProcessVStatus GetProcessVStatus()

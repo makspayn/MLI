@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MLI.Data;
-using NLog;
+using MLI.Services;
 
 namespace MLI.Method
 {
@@ -11,8 +11,7 @@ namespace MLI.Method
 		{
 			Success, Failure
 		}
-
-		private static Logger logger = LogManager.GetCurrentClassLogger();
+		
 		private List<Sequence> facts;
 		private List<Sequence> rules;
 		private Sequence conclusionSequence;
@@ -22,26 +21,28 @@ namespace MLI.Method
 		{
 			reentry = false;
 			name = "Main";
+			inputData = $"выводимое правило {conclusionSequence}";
 			this.index = "";
 			this.facts = facts;
 			this.rules = rules;
 			this.conclusionSequence = conclusionSequence;
-			logger.Debug($"[{GetName()}]: создан процесс");
+			LogService.Debug($"[{GetFullName()}]: создан процесс");
 		}
 
 		protected override void FirstRun()
 		{
-			logger.Info($"[{GetName()}]: процесс запущен");
-			logger.Info($"[{GetName()}]: выводимое правило {conclusionSequence}");
+			Log("процесс запущен");
+			LogService.Info($"[{GetFullName()}]: {inputData}");
 			childProcesses.Add(new ProcessV(this, ++childProcessCount, facts, rules, conclusionSequence));
 			status = Status.Progress;
 			reentry = true;
-			logger.Info($"[{GetName()}]: ожидание завершения дочерних процессов");
+			Log("ожидание завершения дочерних процессов");
 		}
 
 		protected override void ReRun()
 		{
-			logger.Info($"[{GetName()}]: процесс повторно запущен");
+			Log("процесс повторно запущен");
+			Log(inputData);
 			List<Process> newChildProcesses = new List<Process>();
 			if (childProcesses.Cast<ProcessV>()
 				.All(childProcess => childProcess.GetProcessVStatus() != ProcessV.ProcessVStatus.Success))
@@ -61,13 +62,13 @@ namespace MLI.Method
 			if (childProcesses.Count != 0)
 			{
 				status = Status.Progress;
-				logger.Info($"[{GetName()}]: ожидание завершения дочерних процессов");
+				Log("ожидание завершения дочерних процессов");
 			}
 			else
 			{
 				PrintStatus();
 				status = Status.Complete;
-				logger.Info($"[{GetName()}]: процесс завершен");
+				Log("процесс завершен");
 			}
 		}
 
@@ -76,12 +77,18 @@ namespace MLI.Method
 			switch (mainProcessStatus)
 			{
 				case MainProcessStatus.Success:
-					logger.Info($"[{GetName()}]: логический вывод завершен успешно");
+					statusData = "логический вывод завершен успешно";
 					break;
 				case MainProcessStatus.Failure:
-					logger.Info($"[{GetName()}]: логический вывод завершен неудачно");
+					statusData = "логический вывод завершен неудачно";
 					break;
 			}
+			Log(statusData);
+		}
+
+		private void Log(string message)
+		{
+			LogService.Info($"[{GetFullName()}]: {message}");
 		}
 
 		private Sequence GetNewConclusion(Disjunct disjunct)

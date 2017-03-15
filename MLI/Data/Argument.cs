@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using NLog;
+using MLI.Services;
 
 namespace MLI.Data
 {
@@ -13,7 +13,6 @@ namespace MLI.Data
 
 	public class Argument
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static Regex rgxConstant = new Regex(@"^[A-Z0-9][a-zA-Z0-9]*$");
 		private static Regex rgxVariable = new Regex(@"^[a-z][a-zA-Z0-9]*$");
 		private static Regex rgxFunctor = new Regex(@"^[a-z][a-zA-Z0-9]*\([^\s]*\)$");
@@ -43,7 +42,7 @@ namespace MLI.Data
 			}
 			else
 			{
-				logger.Error($"Некорректный аргумент: {argument}");
+				LogService.Error($"Некорректный аргумент: {argument}");
 				throw new Exception($"Некорректный аргумент: {argument}");
 			}
 		}

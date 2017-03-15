@@ -8,6 +8,8 @@
 
 		public static int TickLength { get; set; } = 10;
 
-		public static int InfoLevel { get; set; } = 3;
+		public static LogService.InfoLevel InfoLevel { get; set; } = LogService.InfoLevel.ProcessU;
+
+		public static LogService.LogLevel LogLevel { get; set; } = LogService.LogLevel.Debug;
 	}
 }

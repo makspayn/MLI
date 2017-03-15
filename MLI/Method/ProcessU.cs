@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using MLI.Data;
-using NLog;
+using MLI.Services;
 
 namespace MLI.Method
 {
@@ -11,8 +11,7 @@ namespace MLI.Method
 		{
 			Absolute, Complete, Failure
 		}
-
-		private static Logger logger = LogManager.GetCurrentClassLogger();
+		
 		private Predicate predicate1;
 		private Predicate predicate2;
 		private Substitution substitution = new Substitution();
@@ -21,22 +20,23 @@ namespace MLI.Method
 		public ProcessU(Process parentProcess, int index, Predicate predicate1, Predicate predicate2) : base(parentProcess, index)
 		{
 			name = "U";
+			inputData = $"унификация {predicate1} и {predicate2}";
 			this.predicate1 = new Predicate(predicate1.ToString());
 			this.predicate2 = new Predicate(predicate2.ToString());
-			logger.Debug($"[{GetName()}]: создан процесс");
+			LogService.Debug(LogService.InfoLevel.ProcessU, $"[{GetFullName()}]: создан процесс");
 		}
 
 		protected override void FirstRun()
 		{
-			logger.Info($"[{GetName()}]: процесс запущен");
-			logger.Info($"[{GetName()}]: унификация {predicate1} и {predicate2}");
+			Log("процесс запущен");
+			Log(inputData);
 			processUStatus = Predicate.CanUnify(predicate1, predicate2) ? 
 				(Predicate.Equals(predicate1, predicate2) ? ProcessUStatus.Absolute : 
 				GetUnificator(predicate1.GetArguments(), predicate2.GetArguments())) :
 				ProcessUStatus.Failure;
 			PrintStatus();
 			status = Status.Complete;
-			logger.Info($"[{GetName()}]: процесс завершен");
+			Log("процесс завершен");
 		}
 
 		protected override void ReRun()
@@ -48,15 +48,24 @@ namespace MLI.Method
 			switch (processUStatus)
 			{
 				case ProcessUStatus.Absolute:
-					logger.Info($"[{GetName()}]: унификация выполнена полностью");
+					statusData = "унификация выполнена полностью";
+					Log(statusData);
 					break;
 				case ProcessUStatus.Complete:
-					logger.Info($"[{GetName()}]: унификация выполнена. Унификатор: {{ {substitution.GetSubstitutions()}}}");
+					statusData = "унификация выполнена";
+					resultData = $"Унификатор: {{ {substitution.GetSubstitutions()}}}";
+					Log($"{statusData}. {resultData}");
 					break;
 				case ProcessUStatus.Failure:
-					logger.Info($"[{GetName()}]: унификация невозможна");
+					statusData = "унификация невозможна";
+					Log(statusData);
 					break;
 			}
+		}
+
+		private void Log(string message)
+		{
+			LogService.Info(LogService.InfoLevel.ProcessU, $"[{GetFullName()}]: {message}");
 		}
 
 		private ProcessUStatus GetUnificator(List<Argument> arguments1, List<Argument> arguments2)

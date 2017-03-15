@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MLI.Data;
-using NLog;
+using MLI.Services;
 
 namespace MLI.Method
 {
@@ -12,8 +11,7 @@ namespace MLI.Method
 		{
 			ZeroRest, RestsExist, OnesMatrix
 		}
-
-		private static Logger logger = LogManager.GetCurrentClassLogger();
+		
 		private Sequence ruleSequence;
 		private List<Predicate> rulePredicates = new List<Predicate>();
 		private List<Predicate> predicates = new List<Predicate>();
@@ -24,6 +22,7 @@ namespace MLI.Method
 		{
 			reentry = false;
 			name = "M";
+			inputData = $"правило {ruleSequence}";
 			this.ruleSequence = ruleSequence;
 			foreach (Predicate predicate in ruleSequence.GetPredicates())
 			{
@@ -35,13 +34,13 @@ namespace MLI.Method
 					Predicate.GetInversPredicate(predicate) : 
 					new Predicate(predicate.ToString()));
 			}
-			logger.Debug($"[{GetName()}]: создан процесс");
+			LogService.Debug(LogService.InfoLevel.ProcessM, $"[{GetFullName()}]: создан процесс");
 		}
 
 		protected override void FirstRun()
 		{
-			logger.Info($"[{GetName()}]: процесс запущен");
-			logger.Info($"[{GetName()}]: правило {ruleSequence}");
+			Log("процесс запущен");
+			Log(inputData);
 			foreach (Predicate predicate in predicates)
 			{
 				foreach (Predicate rulePredicate in rulePredicates)
@@ -51,12 +50,12 @@ namespace MLI.Method
 			}
 			status = Status.Progress;
 			reentry = true;
-			logger.Info($"[{GetName()}]: ожидание завершения дочерних процессов");
+			Log("ожидание завершения дочерних процессов");
 		}
 
 		protected override void ReRun()
 		{
-			logger.Info($"[{GetName()}]: процесс повторно запущен");
+			Log("процесс повторно запущен");
 			int restCount = childProcesses.Cast<ProcessU>().Count(
 				childProcess => childProcess.GetProcessUStatus() == ProcessU.ProcessUStatus.Complete);
 			if (restCount > 0)
@@ -84,7 +83,7 @@ namespace MLI.Method
 			childProcesses.Clear();
 			PrintStatus();
 			status = Status.Complete;
-			logger.Info($"[{GetName()}]: процесс завершен");
+			Log("процесс завершен");
 		}
 
 		private Sequence FormRest(ProcessU.Substitution substitution, int number)
@@ -108,9 +107,7 @@ namespace MLI.Method
 
 		private string GetFormatRests()
 		{
-			int i = 1;
-			List<string> restList = rests.Select(rest => $"{i++}) {rest.GetContent()}").ToList();
-			return string.Join("\n", restList);
+			return string.Join("; ", rests.Select(rest => rest.GetContent()).ToList());
 		}
 
 		private void PrintStatus()
@@ -118,16 +115,26 @@ namespace MLI.Method
 			switch (processMStatus)
 			{
 				case ProcessMStatus.ZeroRest:
-					logger.Info($"[{GetName()}]: получен нулевой остаток");
+					statusData = "получен нулевой остаток";
+					Log(statusData);
 					break;
 				case ProcessMStatus.RestsExist:
-					logger.Info($"[{GetName()}]: получены остатки:\n{GetFormatRests()}");
+					statusData = "получены остатки";
+					resultData = $"Остатки: {GetFormatRests()}";
+					Log($"{statusData}: {GetFormatRests()}");
 					break;
 				case ProcessMStatus.OnesMatrix:
 					rests.Add(new Sequence(ruleSequence.ToString()));
-					logger.Info($"[{GetName()}]: получена единичная матрица. Остаток: {rests[0].GetContent()}");
+					statusData = "получена единичная матрица";
+					resultData = $"Остаток: {rests[0].GetContent()}";
+					Log($"{statusData}. {resultData}");
 					break;
 			}
+		}
+
+		private void Log(string message)
+		{
+			LogService.Info(LogService.InfoLevel.ProcessM, $"[{GetFullName()}]: {message}");
 		}
 
 		public ProcessMStatus GetProcessMStatus()

@@ -5,14 +5,12 @@ using MLI.Data;
 using MLI.Forms;
 using MLI.Method;
 using MLI.Services;
-using NLog;
 using Process = MLI.Method.Process;
 
 namespace MLI.Machine
 {
 	public class Machine
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static Machine instance;
 		private int execUnitCount;
 		private int unifUnitCount;
@@ -33,19 +31,19 @@ namespace MLI.Machine
 			BuildControlUnit();
 			ResolveDependencies();
 			instance = this;
-			logger.Info($"Создана машина {execUnitCount}x{unifUnitCount}");
+			LogService.Info($"Создана машина {execUnitCount}x{unifUnitCount}");
 		}
 
 		public static Machine GetInstance()
 		{
 			if (instance != null) return instance;
-			logger.Error("Машина еще не создана!");
+			LogService.Error("Машина еще не создана!");
 			throw new Exception("Машина еще не создана!");
 		}
 
 		private void BuildKnowledgeBase(List<Sequence> facts, List<Sequence> rules, List<Sequence> conclusions)
 		{
-			logger.Debug("Создание базы знаний");
+			LogService.Debug("Создание базы знаний");
 			knowledgeBase = new KnowledgeBase();
 			knowledgeBase.SetFacts(facts);
 			knowledgeBase.SetRules(rules);
@@ -54,13 +52,13 @@ namespace MLI.Machine
 
 		private void BuildWorkMachineSupervisor()
 		{
-			logger.Debug("Создание диспетчера работы машины");
+			LogService.Debug("Создание диспетчера работы машины");
 			workMachineSupervisor = new Supervisor();
 		}
 
 		private void BuildExecUnits()
 		{
-			logger.Debug("Создание исполнительных блоков");
+			LogService.Debug("Создание исполнительных блоков");
 			execUnits = new List<ProcessUnit>();
 			for (int i = 0; i < execUnitCount; i++)
 			{
@@ -70,13 +68,13 @@ namespace MLI.Machine
 
 		private void BuildControlUnit()
 		{
-			logger.Debug("Создание блока управления");
+			LogService.Debug("Создание блока управления");
 			controlUnit = new ControlUnit("CU №1");
 		}
 
 		private void ResolveDependencies()
 		{
-			logger.Debug("Разрешение зависимостей");
+			LogService.Debug("Разрешение зависимостей");
 			workMachineSupervisor.SetProcessUnits(execUnits);
 			workMachineSupervisor.SetControlUnit(controlUnit);
 			foreach (ProcessUnit execUnit in execUnits)
@@ -88,8 +86,9 @@ namespace MLI.Machine
 
 		public void Run()
 		{
+			StatisticsService.Clear();
 			machineWatch.Start();
-			logger.Info("Машина запущена");
+			LogService.Info("Машина запущена");
 			Process mainProcess = new MainProcess(null, 0, knowledgeBase.facts, knowledgeBase.rules, knowledgeBase.conclusions[0]);
 			workMachineSupervisor.AddMessage(
 				new Message(mainProcess, Message.MessageType.Create), execUnits[0]);
@@ -104,7 +103,7 @@ namespace MLI.Machine
 		public void CompleteWork(string message)
 		{
 			machineWatch.Stop();
-			logger.Info("Машина завершила работу");
+			LogService.Info("Машина завершила работу");
 			CompleteEvent machineEvent = new CompleteEvent();
 			machineEvent.machineCompleteEvent += MainForm.GetInstance().MachineCompleteEventHandler;
 			machineEvent.OnMachineCompleteEvent($"{message}\n" +

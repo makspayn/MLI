@@ -4,13 +4,11 @@ using System.Linq;
 using System.Windows.Forms;
 using MLI.Data;
 using MLI.Services;
-using NLog;
 
 namespace MLI.Forms
 {
 	public partial class MainForm : Form
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
 		private static MainForm instance;
 		private Machine.Machine machine;
 
@@ -46,7 +44,7 @@ namespace MLI.Forms
 			}
 			catch (Exception exception)
 			{
-				logger.Error($"Возникла ошибка при чтении файла!\n{exception}");
+				LogService.Error($"Возникла ошибка при чтении файла!\n{exception}");
 				MessageBox.Show(@"Возникла ошибка при чтении файла!");
 				return;
 			}
@@ -62,7 +60,7 @@ namespace MLI.Forms
 			}
 			catch (Exception exception)
 			{
-				logger.Error($"Возникла ошибка при сохранении файла!\n{exception}");
+				LogService.Error($"Возникла ошибка при сохранении файла!\n{exception}");
 				MessageBox.Show(@"Возникла ошибка при сохранении файла!");
 			}
 		}
@@ -76,7 +74,7 @@ namespace MLI.Forms
 			}
 			catch (Exception exception)
 			{
-				logger.Error($"Возникла ошибка при сохранении файла!\n{exception}");
+				LogService.Error($"Возникла ошибка при сохранении файла!\n{exception}");
 				MessageBox.Show(@"Возникла ошибка при сохранении файла!");
 			}
 		}
@@ -88,7 +86,7 @@ namespace MLI.Forms
 
 		private void menuItemRun_Click(object sender, System.EventArgs e)
 		{
-			logger.Debug("Создание машины");
+			LogService.Debug("Создание машины");
 			FillKnowledgeBase();
 			try
 			{
@@ -100,14 +98,14 @@ namespace MLI.Forms
 				return;
 			}
 			SwitchState(false);
-			logger.Debug("Запуск машины");
+			LogService.Debug("Запуск машины");
 			LogService.StartLog();
 			machine.Run();
 		}
 
 		private void menuItemStop_Click(object sender, EventArgs e)
 		{
-			logger.Debug("Остановка машины");
+			LogService.Debug("Остановка машины");
 			machine.Stop();
 		}
 
@@ -193,7 +191,7 @@ namespace MLI.Forms
 			}
 			catch (Exception exception)
 			{
-				logger.Error("Создание машины прервано. Ошибка при создании фактов!");
+				LogService.Error("Создание машины прервано. Ошибка при создании фактов!");
 				throw new Exception($"Ошибка при создании фактов!\n{exception.Message}");
 			}
 			try
@@ -209,7 +207,7 @@ namespace MLI.Forms
 			}
 			catch (Exception exception)
 			{
-				logger.Error("Создание машины прервано. Ошибка при создании правил!");
+				LogService.Error("Создание машины прервано. Ошибка при создании правил!");
 				throw new Exception($"Ошибка при создании правил!\n{exception.Message}");
 			}
 			try
@@ -225,7 +223,7 @@ namespace MLI.Forms
 			}
 			catch (Exception exception)
 			{
-				logger.Error("Создание машины прервано. Ошибка при создании выводимых правил!");
+				LogService.Error("Создание машины прервано. Ошибка при создании выводимых правил!");
 				throw new Exception($"Ошибка при создании выводимых правил!\n{exception.Message}");
 			}
 			return new Machine.Machine(facts, rules, conclusions);

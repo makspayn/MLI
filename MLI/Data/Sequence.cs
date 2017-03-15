@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NLog;
+using MLI.Services;
 
 namespace MLI.Data
 {
@@ -11,8 +11,7 @@ namespace MLI.Data
 		{
 			Sequence, One, Zero
 		}
-
-		private static Logger logger = LogManager.GetCurrentClassLogger();
+		
 		private static string start = "1 -> ";
 		private static string separator = " v ";
 		private List<Disjunct> disjuncts;
@@ -37,7 +36,7 @@ namespace MLI.Data
 			}
 			catch (Exception exception)
 			{
-				logger.Error($"Некорректная секвенция: {sequence}");
+				LogService.Error($"Некорректная секвенция: {sequence}");
 				throw new Exception($"Некорректная секвенция: {sequence}\n" + exception.Message);
 			}
 		}
