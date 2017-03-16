@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.Linq;
+using System.Windows.Forms;
+using MLI.Services;
 
 namespace MLI.Forms
 {
@@ -30,6 +32,13 @@ namespace MLI.Forms
 				}
 			}
 			instance.Show();
+		}
+
+		private void btnShowLog_Click(object sender, System.EventArgs e)
+		{
+			rtbLog.Lines = (from statElement in StatisticsService.GetSortStatistics()
+							where statElement.GetExecutions().Any(execution => execution.ProcessUnitNumber == numExecUnitNumber.Value)
+							select $"Выполнена процедура {statElement.ProcessFullName}").ToArray();
 		}
 	}
 }

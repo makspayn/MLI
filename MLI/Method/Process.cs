@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using MLI.Machine;
+using MLI.Services;
 
 namespace MLI.Method
 {
@@ -9,6 +11,7 @@ namespace MLI.Method
 			Progress, Complete
 		}
 
+		protected LogService.InfoLevel infoLevel;
 		protected Process parentProcess;
 		protected List<Process> childProcesses = new List<Process>();
 		protected Status status;
@@ -16,9 +19,13 @@ namespace MLI.Method
 		protected string name;
 		protected string index;
 		protected int childProcessCount;
-		protected string inputData;
-		protected string statusData;
-		protected string resultData;
+		protected string inputData = "";
+		protected string statusData = "";
+		protected string resultData = "";
+		protected int runTime;
+		protected ProcessUnit processUnit;
+		protected StatElement statElement;
+		protected List<Execution> executions = new List<Execution>();
 
 		protected Process(Process parentProcess, int index)
 		{
@@ -30,8 +37,10 @@ namespace MLI.Method
 			}
 		}
 
-		public void Run()
+		public void Run(ProcessUnit processUnit)
 		{
+			this.processUnit = processUnit;
+			
 			if (!reentry)
 			{
 				FirstRun();
@@ -40,11 +49,22 @@ namespace MLI.Method
 			{
 				ReRun();
 			}
+			executions.Add(new Execution
+			{
+				ProcessUnitName = processUnit.GetId(),
+				ProcessUnitNumber = int.Parse(processUnit.GetId().Substring(processUnit.GetId().IndexOf('№') + 1).Split(' ')[0]),
+				RunTime = runTime
+			});
 		}
 
 		protected abstract void FirstRun();
 
 		protected abstract void ReRun();
+
+		public LogService.InfoLevel GetInfoLevel()
+		{
+			return infoLevel;
+		}
 
 		public Process GetParentProcess()
 		{
@@ -54,6 +74,21 @@ namespace MLI.Method
 		public List<Process> GetChildProcesses()
 		{
 			return childProcesses;
+		}
+
+		public List<Execution> GetExecutions()
+		{
+			return executions;
+		}
+
+		public void SetStatElement(StatElement statElement)
+		{
+			this.statElement = statElement;
+		}
+
+		public StatElement GetStatElement()
+		{
+			return statElement;
 		}
 
 		public Status GetStatus()
@@ -94,6 +129,11 @@ namespace MLI.Method
 		public string GetResultData()
 		{
 			return resultData;
+		}
+
+		protected void Log(string message)
+		{
+			LogService.Info(infoLevel, $"[{GetFullName()}]: {message}");
 		}
 	}
 }

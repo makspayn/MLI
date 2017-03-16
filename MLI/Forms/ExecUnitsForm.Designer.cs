@@ -32,6 +32,7 @@
 			this.btnShowLog.TabIndex = 10;
 			this.btnShowLog.Text = "Показать лог";
 			this.btnShowLog.UseVisualStyleBackColor = true;
+			this.btnShowLog.Click += new System.EventHandler(this.btnShowLog_Click);
 			// 
 			// numExecUnitNumber
 			// 

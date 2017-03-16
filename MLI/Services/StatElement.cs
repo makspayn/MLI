@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using MLI.Machine;
+﻿using System;
+using System.Collections.Generic;
 using MLI.Method;
 
 namespace MLI.Services
@@ -10,16 +10,20 @@ namespace MLI.Services
 
 		public int ProcessUnitNumber { get; set; }
 
-		public int readyTime { get; set; }
+		public int ReadyTime { get; set; }
 
-		public int runTime { get; set; }
+		public int RunTime { get; set; }
 
-		public int waitTime { get; set; }
+		public int WaitTime { get; set; }
 	}
 
-	public class StatElement
+	public class StatElement : IComparable<StatElement>
 	{
+		public string ProcessFullName => ProcessKind + ProcessIndex;
+
 		public string ProcessKind { get; set; }
+
+		public string ProcessIndex { get; set; }
 
 		public int ProcessVIndex { get; set; }
 
@@ -35,32 +39,25 @@ namespace MLI.Services
 
 		public string ResultData { get; set; }
 
-		private List<Execution> executions = new List<Execution>();
+		private List<Execution> executions;
 
 		public List<Execution> GetExecutions()
 		{
 			return executions;
 		}
 
-		public bool IndexEquals(Process process)
-		{
-			return false;
-		}
-
-		public StatElement Build(Process process, ProcessUnit processUnit)
+		public StatElement Build(Process process)
 		{
 			ProcessKind = process.GetName();
+			ProcessIndex = process.GetIndex();
 			ProcessVIndex = GetProcessIndex(process, 0);
-			ProcessMIndex = GetProcessIndex(process, 1);
-			ProcessNIndex = GetProcessIndex(process, 2);
+			ProcessNIndex = GetProcessIndex(process, 1);
+			ProcessMIndex = GetProcessIndex(process, 2);
 			ProcessUIndex = GetProcessIndex(process, 3);
 			InputData = process.GetInputData();
 			StatusData = process.GetStatusData();
 			ResultData = process.GetResultData();
-			executions.Add(new Execution
-			{
-				ProcessUnitName = processUnit.GetId()
-			});
+			executions = process.GetExecutions();
 			return this;
 		}
 
@@ -72,6 +69,21 @@ namespace MLI.Services
 			}
 			string[] indexes = process.GetIndex().Split('.');
 			return indexes.Length > index ? int.Parse(indexes[index]) : 0;
+		}
+
+		public int CompareTo(StatElement other)
+		{
+			if (ProcessVIndex == other.ProcessVIndex)
+			{
+				if (ProcessNIndex == other.ProcessNIndex)
+				{
+					return ProcessMIndex == other.ProcessMIndex ?
+						ProcessUIndex.CompareTo(other.ProcessUIndex) :
+						ProcessMIndex.CompareTo(other.ProcessMIndex);
+				}
+				return ProcessNIndex.CompareTo(other.ProcessNIndex);
+			}
+			return ProcessVIndex.CompareTo(other.ProcessVIndex);
 		}
 	}
 }

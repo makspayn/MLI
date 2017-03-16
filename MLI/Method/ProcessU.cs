@@ -19,6 +19,7 @@ namespace MLI.Method
 
 		public ProcessU(Process parentProcess, int index, Predicate predicate1, Predicate predicate2) : base(parentProcess, index)
 		{
+			infoLevel = LogService.InfoLevel.ProcessU;
 			name = "U";
 			inputData = $"унификация {predicate1} и {predicate2}";
 			this.predicate1 = new Predicate(predicate1.ToString());
@@ -61,11 +62,6 @@ namespace MLI.Method
 					Log(statusData);
 					break;
 			}
-		}
-
-		private void Log(string message)
-		{
-			LogService.Info(LogService.InfoLevel.ProcessU, $"[{GetFullName()}]: {message}");
 		}
 
 		private ProcessUStatus GetUnificator(List<Argument> arguments1, List<Argument> arguments2)

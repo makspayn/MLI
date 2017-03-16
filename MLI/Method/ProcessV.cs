@@ -20,6 +20,7 @@ namespace MLI.Method
 
 		public ProcessV(Process parentProcess, int index, List<Sequence> facts, List<Sequence> rules, Sequence conclusionSequence) : base(parentProcess, index)
 		{
+			infoLevel = LogService.InfoLevel.ProcessV;
 			reentry = false;
 			name = "V";
 			inputData = $"выводимое правило {conclusionSequence}";
@@ -151,11 +152,6 @@ namespace MLI.Method
 					Log(statusData);
 					break;
 			}
-		}
-
-		private void Log(string message)
-		{
-			LogService.Info(LogService.InfoLevel.ProcessV, $"[{GetFullName()}]: {message}");
 		}
 
 		public ProcessVStatus GetProcessVStatus()

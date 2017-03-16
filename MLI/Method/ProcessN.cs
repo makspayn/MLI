@@ -22,6 +22,7 @@ namespace MLI.Method
 
 		public ProcessN(Process parentProcess, int index, List<Sequence> facts, Sequence ruleSequence, Sequence conclusionSequence) : base(parentProcess, index)
 		{
+			infoLevel = LogService.InfoLevel.ProcessN;
 			reentry = false;
 			name = "N";
 			inputData = $"правило {ruleSequence}";
@@ -131,11 +132,6 @@ namespace MLI.Method
 					Log(statusData);
 					break;
 			}
-		}
-
-		private void Log(string message)
-		{
-			LogService.Info(LogService.InfoLevel.ProcessN, $"[{GetFullName()}]: {message}");
 		}
 
 		public ProcessNStatus GetProcessNStatus()

@@ -19,6 +19,7 @@ namespace MLI.Method
 
 		public MainProcess(Process parentProcess, int index, List<Sequence> facts, List<Sequence> rules, Sequence conclusionSequence) : base(parentProcess, index)
 		{
+			infoLevel = LogService.InfoLevel.All;
 			reentry = false;
 			name = "Main";
 			inputData = $"выводимое правило {conclusionSequence}";
@@ -86,10 +87,7 @@ namespace MLI.Method
 			Log(statusData);
 		}
 
-		private void Log(string message)
-		{
-			LogService.Info($"[{GetFullName()}]: {message}");
-		}
+		
 
 		private Sequence GetNewConclusion(Disjunct disjunct)
 		{

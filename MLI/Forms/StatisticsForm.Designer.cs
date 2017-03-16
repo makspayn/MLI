@@ -82,6 +82,7 @@
 			this.Name = "StatisticsForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Статистика";
+			this.Load += new System.EventHandler(this.StatisticsForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.dgStatistics)).EndInit();
 			this.ResumeLayout(false);
 

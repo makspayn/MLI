@@ -27,9 +27,9 @@ namespace MLI.Machine
 		protected override void Run()
 		{
 			LogService.Debug($"На {id} поступил процесс {process.GetFullName()}");
-			process.Run();
+			process.Run(this);
 			LogService.Debug($"{id} выполнил процесс {process.GetFullName()}");
-			StatisticsService.Add(process, this);
+			StatisticsService.Add(process);
 			FormMessages(process);
 		}
 
