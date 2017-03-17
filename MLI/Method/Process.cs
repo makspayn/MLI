@@ -40,7 +40,6 @@ namespace MLI.Method
 		public void Run(ProcessUnit processUnit)
 		{
 			this.processUnit = processUnit;
-			
 			if (!reentry)
 			{
 				FirstRun();
@@ -49,12 +48,17 @@ namespace MLI.Method
 			{
 				ReRun();
 			}
-			executions.Add(new Execution
+			Execution execution = new Execution();
+			execution.ProcessUnitName = processUnit.GetId();
+			execution.ProcessExecUnitNumber = int.Parse(processUnit.GetId().Substring(processUnit.GetId().IndexOf('№') + 1).Split(' ')[0]);
+			if (processUnit.GetId().Contains("("))
 			{
-				ProcessUnitName = processUnit.GetId(),
-				ProcessUnitNumber = int.Parse(processUnit.GetId().Substring(processUnit.GetId().IndexOf('№') + 1).Split(' ')[0]),
-				RunTime = runTime
-			});
+				execution.ProcessUnifUnitNumber = execution.ProcessExecUnitNumber;
+				string processUnitName = processUnit.GetId().Substring(processUnit.GetId().IndexOf('(') + 1).Split(')')[0];
+				execution.ProcessExecUnitNumber = int.Parse(processUnitName.Substring(processUnit.GetId().IndexOf('№') + 1).Split(' ')[0]);
+			}
+			execution.RunTime = runTime;
+			executions.Add(execution);
 		}
 
 		protected abstract void FirstRun();

@@ -8,7 +8,9 @@ namespace MLI.Services
 	{
 		public string ProcessUnitName { get; set; }
 
-		public int ProcessUnitNumber { get; set; }
+		public int ProcessExecUnitNumber { get; set; }
+
+		public int ProcessUnifUnitNumber { get; set; }
 
 		public int ReadyTime { get; set; }
 

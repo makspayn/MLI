@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using MLI.Data;
 using MLI.Services;
@@ -54,7 +55,7 @@ namespace MLI.Method
 					break;
 				case ProcessUStatus.Complete:
 					statusData = "унификация выполнена";
-					resultData = $"Унификатор: {{ {substitution.GetSubstitutions()}}}";
+					resultData = $"Унификатор: {{ {substitution.GetSubstitutions()} }}";
 					Log($"{statusData}. {resultData}");
 					break;
 				case ProcessUStatus.Failure:
@@ -225,12 +226,8 @@ namespace MLI.Method
 
 			public string GetSubstitutions()
 			{
-				StringBuilder sb = new StringBuilder();
-				for (int i = 0; i < fromArguments.Count; i++)
-				{
-					sb.Append($"{fromArguments[i]}/{toArguments[i]}; ");
-				}
-				return sb.ToString();
+				return string.Join("; ", fromArguments.Select(
+					(t, i) => string.Join("/", t.ToString(), toArguments[i].ToString())).ToList());
 			}
 		}
 	}

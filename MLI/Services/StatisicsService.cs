@@ -6,22 +6,32 @@ namespace MLI.Services
 	public static class StatisticsService
 	{
 		private static List<StatElement> statistics = new List<StatElement>();
-		private static List<StatElement> sortStatistics = new List<StatElement>();
+		public static int TotalTime { get; set; }
 		public static int ProcessVCount { get; set; }
 		public static int ProcessNCount { get; set; }
 		public static int ProcessMCount { get; set; }
 		public static int ProcessUCount { get; set; }
+		public static int TotalTimeControlUnit { get; set; }
+		public static int TotalTimeProcessUnit { get; set; }
+		public static int TotalTimeUnifUnit { get; set; }
+		public static int LoadProcessExecUnit { get; set; }
+		public static int LoadProcessUnifUnit { get; set; }
 
 		public static void Clear()
 		{
 			lock (statistics)
 			{
 				statistics.Clear();
-				sortStatistics.Clear();
+				TotalTime = 0;
 				ProcessVCount = 0;
 				ProcessNCount = 0;
 				ProcessMCount = 0;
 				ProcessUCount = 0;
+				TotalTimeControlUnit = 0;
+				TotalTimeProcessUnit = 0;
+				TotalTimeUnifUnit = 0;
+				LoadProcessExecUnit = 0;
+				LoadProcessUnifUnit = 0;
 			}
 		}
 
@@ -58,10 +68,7 @@ namespace MLI.Services
 			}
 			else
 			{
-				//int index = statistics.IndexOf(element);
-				element = element.Build(process);
-				process.SetStatElement(element);
-				//statistics[index] = element;
+				element.Build(process);
 			}
 		}
 
@@ -70,18 +77,12 @@ namespace MLI.Services
 			return statistics;
 		}
 
-		public static void SortStatistics()
+		public static void PrepareStatistics()
 		{
 			lock (statistics)
 			{
-				sortStatistics.AddRange(statistics);
+				statistics.Sort();
 			}
-			sortStatistics.Sort();
-		}
-
-		public static List<StatElement> GetSortStatistics()
-		{
-			return sortStatistics;
 		}
 	}
 }

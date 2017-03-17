@@ -105,7 +105,7 @@ namespace MLI.Machine
 			machineWatch.Stop();
 			LogService.Info("Машина завершила работу");
 			LogService.Info("Сортировка статистики");
-			StatisticsService.SortStatistics();
+			StatisticsService.PrepareStatistics();
 			LogService.Info("Сортировка статистики заверешена");
 			CompleteEvent machineEvent = new CompleteEvent();
 			machineEvent.machineCompleteEvent += MainForm.GetInstance().MachineCompleteEventHandler;

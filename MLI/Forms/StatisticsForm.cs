@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
-using MLI.Services;
+using static MLI.Services.StatisticsService;
+using static MLI.Services.SettingsService;
 
 namespace MLI.Forms
 {
@@ -52,10 +53,16 @@ namespace MLI.Forms
 			dgStatistics.Rows.Add("Загрузка Исполнительных Блоков");
 			dgStatistics.Rows.Add("Загрузка Блоков Унификации");
 
-			dgStatistics.Rows[1].Cells[1].Value = StatisticsService.ProcessVCount;
-			dgStatistics.Rows[2].Cells[1].Value = StatisticsService.ProcessNCount;
-			dgStatistics.Rows[3].Cells[1].Value = StatisticsService.ProcessMCount;
-			dgStatistics.Rows[4].Cells[1].Value = StatisticsService.ProcessUCount;
+			dgStatistics.Rows[0].Cells[1].Value = $"{TotalTime} нс";
+			dgStatistics.Rows[1].Cells[1].Value = ProcessVCount;
+			dgStatistics.Rows[2].Cells[1].Value = ProcessNCount;
+			dgStatistics.Rows[3].Cells[1].Value = ProcessMCount;
+			dgStatistics.Rows[4].Cells[1].Value = ProcessUCount;
+			dgStatistics.Rows[5].Cells[1].Value = $"{TotalTimeControlUnit} нс";
+			dgStatistics.Rows[6].Cells[1].Value = $"{TotalTimeProcessUnit} нс";
+			dgStatistics.Rows[7].Cells[1].Value = $"{TotalTimeUnifUnit} нс";
+			dgStatistics.Rows[8].Cells[1].Value = $"{LoadProcessExecUnit} ({(double) LoadProcessExecUnit / ExecUnitCount * 100.0}%)";
+			dgStatistics.Rows[9].Cells[1].Value = $"{LoadProcessUnifUnit} ({(double) LoadProcessUnifUnit / UnifUnitCount * 100.0}%)";
 		}
 	}
 }

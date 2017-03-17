@@ -39,6 +39,7 @@
 			this.Name = "TreeForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Дерево вывода";
+			this.Load += new System.EventHandler(this.TreeForm_Load);
 			this.ResumeLayout(false);
 
 		}

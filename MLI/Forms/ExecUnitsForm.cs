@@ -36,9 +36,9 @@ namespace MLI.Forms
 
 		private void btnShowLog_Click(object sender, System.EventArgs e)
 		{
-			rtbLog.Lines = (from statElement in StatisticsService.GetSortStatistics()
-							where statElement.GetExecutions().Any(execution => execution.ProcessUnitNumber == numExecUnitNumber.Value)
-							select $"Выполнена процедура {statElement.ProcessFullName}").ToArray();
+			rtbLog.Lines = (from statElement in StatisticsService.GetStatistics()
+							where statElement.GetExecutions().Any(execution => execution.ProcessExecUnitNumber == numExecUnitNumber.Value)
+							select $"Выполнен процесс {statElement.ProcessFullName}").ToArray();
 		}
 	}
 }
