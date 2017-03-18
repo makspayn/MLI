@@ -1,5 +1,6 @@
 ﻿using MLI.Data;
 using MLI.Method;
+using MLI.Services;
 
 namespace MLI.Machine
 {
@@ -32,20 +33,27 @@ namespace MLI.Machine
 			Process parentProcess = message.ParentProcess;
 			if (message.Type == Message.MessageType.Create)
 			{
+				RunCommand(Command.CreateFrame);
+				RunCommand(Command.AddFrameToList);
 				frameList.AddFrame(new Frame(message));
 				if (parentProcess != null)
 				{
 					frameList.AddChild(parentProcess);
 				}
+				RunCommand(Command.DeleteMessageFromQueue);
+				RunCommand(Command.CreateProcess);
 				supervisor.AddProcess(process, this);
 			}
 			else
 			{
 				frameList.DeleteFrame(process);
+				RunCommand(Command.DeleteFrameFromList);
 				if (parentProcess != null)
 				{
+					RunCommand(Command.DeleteMessageFromQueue);
 					if (frameList.DeleteChild(parentProcess))
 					{
+						RunCommand(Command.CreateProcess);
 						supervisor.AddProcess(parentProcess, this);
 					}
 					else
@@ -60,6 +68,7 @@ namespace MLI.Machine
 					Machine.GetInstance().CompleteWork("Логический вывод завершен успешно!");
 				}
 			}
+			StatisticsService.SetTotalTimeControlUnit(runTime);
 		}
 	}
 }

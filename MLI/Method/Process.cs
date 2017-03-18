@@ -25,6 +25,7 @@ namespace MLI.Method
 		protected int readyTime = -1;
 		protected int startTime;
 		protected int runTime;
+		protected int endTime;
 		protected ProcessUnit processUnit;
 		protected StatElement statElement;
 		protected List<Execution> executions = new List<Execution>();
@@ -42,10 +43,6 @@ namespace MLI.Method
 		public void Run(ProcessUnit processUnit)
 		{
 			startTime = StatisticsService.TotalTime;
-			if (readyTime == -1)
-			{
-				readyTime = 0;
-			}
 			this.processUnit = processUnit;
 			if (!reentry)
 			{
@@ -55,6 +52,20 @@ namespace MLI.Method
 			{
 				ReRun();
 			}
+			FormExecution();
+			endTime = startTime + runTime;
+			runTime = 0;
+			startTime = 0;
+			readyTime = -1;
+			StatisticsService.SetTotalTime(endTime, this is ProcessU);
+		}
+
+		protected abstract void FirstRun();
+
+		protected abstract void ReRun();
+
+		private void FormExecution()
+		{
 			Execution execution = new Execution();
 			execution.ProcessUnitName = processUnit.GetId();
 			execution.ProcessExecUnitNumber = int.Parse(processUnit.GetId().Substring(processUnit.GetId().IndexOf('№') + 1).Split(' ')[0]);
@@ -64,25 +75,13 @@ namespace MLI.Method
 				string processUnitName = processUnit.GetId().Substring(processUnit.GetId().IndexOf('(') + 1).Split(')')[0];
 				execution.ProcessExecUnitNumber = int.Parse(processUnitName.Substring(processUnit.GetId().IndexOf('№') + 1).Split(' ')[0]);
 			}
+			execution.WaitTime = readyTime != -1 ? readyTime - endTime : startTime - endTime;
+			execution.ReadyTime = readyTime != -1 ? startTime - readyTime : 0;
 			execution.StartTime = startTime;
-			if (executions.Count > 0)
-			{
-				execution.WaitTime = (readyTime != 0 ? readyTime : startTime) - executions[executions.Count - 1].EndTime;
-			}
-			execution.ReadyTime = readyTime != 0 ? startTime - readyTime : 0;
-			runTime = 10; //////////////////////////////
 			execution.RunTime = runTime;
 			execution.EndTime = startTime + runTime;
-			readyTime = -1;
-			startTime = 0;
-			runTime = 0;
-			StatisticsService.SetTotalTime(execution.EndTime);
 			executions.Add(execution);
 		}
-
-		protected abstract void FirstRun();
-
-		protected abstract void ReRun();
 
 		public LogService.InfoLevel GetInfoLevel()
 		{

@@ -34,11 +34,17 @@ namespace MLI.Method
 		{
 			Log("процесс запущен");
 			Log(inputData);
+			runTime += processUnit.RunCommand(Command.CanInference, 
+				facts.Sum(fact => fact.GetDisjuncts().Count), 
+				rules.Sum(rule => rule.GetDisjuncts().Count), 
+				conclusionSequence.GetDisjuncts().Count);
 			if (CanInference())
 			{
 				Log("вывод может быть осуществим");
 				foreach (Sequence rule in rules)
 				{
+					runTime += processUnit.RunCommand(Command.CreateMessage);
+					runTime += processUnit.RunCommand(Command.AddMessageToQueue);
 					childProcesses.Add(new ProcessN(this, ++childProcessCount, facts, rule, conclusionSequence));
 				}
 				status = Status.Progress;
@@ -47,6 +53,8 @@ namespace MLI.Method
 			}
 			else
 			{
+				runTime += processUnit.RunCommand(Command.CreateMessage);
+				runTime += processUnit.RunCommand(Command.AddMessageToQueue);
 				Log("вывод не может быть осуществим");
 				processVStatus = ProcessVStatus.Failure;
 				PrintStatus();
@@ -58,12 +66,14 @@ namespace MLI.Method
 		protected override void ReRun()
 		{
 			Log("процесс повторно запущен");
+			runTime += processUnit.RunCommand(Command.AnalyzeRestsMatrix, childProcesses.Count);
 			if (childProcesses.Cast<ProcessN>()
 				.All(childProcess => childProcess.GetProcessNStatus() != ProcessN.ProcessNStatus.ZeroRest))
 			{
 				if (childProcesses.Cast<ProcessN>()
 					.Any(childProcess => childProcess.GetProcessNStatus() == ProcessN.ProcessNStatus.RestExists))
 				{
+					runTime += processUnit.RunCommand(Command.FormRest, childProcesses.Count);
 					foreach (ProcessN childProcess in childProcesses.Cast<ProcessN>())
 					{
 						switch (FormRest(childProcess.GetRest()))
@@ -94,6 +104,9 @@ namespace MLI.Method
 			{
 				processVStatus = ProcessVStatus.Success;
 			}
+			runTime += processUnit.RunCommand(Command.CreateMessage);
+			runTime += processUnit.RunCommand(Command.AddMessageToQueue);
+			runTime += processUnit.RunCommand(Command.WriteMemory);
 			PrintStatus();
 			status = Status.Complete;
 			Log("процесс завершен");
@@ -130,6 +143,7 @@ namespace MLI.Method
 			{
 				fullRests.Add(rest);
 			}
+			runTime += processUnit.RunCommand(Command.MinimizeSequence, fullRests.Sum(rest => rest.GetDisjuncts().Count));
 			rest = Sequence.Minimize(Sequence.Multiply(fullRests));
 			return Sequence.GetSequenceState(rest);
 		}

@@ -132,6 +132,7 @@
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\LogService.cs" />
     <Compile Include="Services\StatElement.cs" />
+    <Compile Include="Services\CommandService.cs" />
     <Compile Include="Services\StatisicsService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <EmbeddedResource Include="Forms\AboutForm.resx">

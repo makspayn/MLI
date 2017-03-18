@@ -6,6 +6,7 @@ namespace MLI.Machine
 	public abstract class Processor
 	{
 		protected string id;
+		protected int runTime;
 		private bool busy;
 		private bool complete;
 		private Semaphore semaphore;
@@ -19,6 +20,13 @@ namespace MLI.Machine
 			Thread thread = new Thread(RunInThread) { IsBackground = true };
 			thread.Start();
 			LogService.Debug($"{id} создан и запущен");
+		}
+
+		public int RunCommand(Command command, params object[] param)
+		{
+			int time = CommandService.RunCommand(command, param);
+			runTime += time;
+			return time;
 		}
 
 		public void SetBusyFlag(bool busy)

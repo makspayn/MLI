@@ -7,6 +7,7 @@ namespace MLI.Services
 	{
 		private static List<StatElement> statistics = new List<StatElement>();
 		private static object TotalTimeSync = new object();
+		private static object TotalTimeControlUnitSync = new object();
 		public static int TotalTime { get; set; }
 		public static int ProcessVCount { get; set; }
 		public static int ProcessNCount { get; set; }
@@ -38,7 +39,6 @@ namespace MLI.Services
 
 		public static void Add(Process process)
 		{
-			DefineProcessCount(process);
 			DefineLoadProcessUnits(process);
 			if (process.GetInfoLevel() > SettingsService.InfoLevel)
 			{
@@ -47,6 +47,7 @@ namespace MLI.Services
 			StatElement element = process.GetStatElement();
 			if (element == null)
 			{
+				DefineProcessCount(process);
 				element = new StatElement().Build(process);
 				process.SetStatElement(element);
 				lock (statistics)
@@ -73,13 +74,32 @@ namespace MLI.Services
 			}
 		}
 
-		public static void SetTotalTime(int time)
+		public static void SetTotalTime(int time, bool unification)
 		{
 			lock (TotalTimeSync)
 			{
 				if (TotalTime < time)
 				{
+					if (unification)
+					{
+						TotalTimeUnifUnit += time - TotalTime;
+					}
+					else
+					{
+						TotalTimeProcessUnit += time - TotalTime;
+					}
 					TotalTime = time;
+				}
+			}
+		}
+
+		public static void SetTotalTimeControlUnit(int time)
+		{
+			lock (TotalTimeControlUnitSync)
+			{
+				if (TotalTime < time)
+				{
+					TotalTimeControlUnit = time;
 				}
 			}
 		}

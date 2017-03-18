@@ -58,9 +58,9 @@ namespace MLI.Forms
 			dgStatistics.Rows[2].Cells[1].Value = ProcessNCount;
 			dgStatistics.Rows[3].Cells[1].Value = ProcessMCount;
 			dgStatistics.Rows[4].Cells[1].Value = ProcessUCount;
-			dgStatistics.Rows[5].Cells[1].Value = $"{TotalTimeControlUnit} нс";
-			dgStatistics.Rows[6].Cells[1].Value = $"{TotalTimeProcessUnit} нс";
-			dgStatistics.Rows[7].Cells[1].Value = $"{TotalTimeUnifUnit} нс";
+			dgStatistics.Rows[5].Cells[1].Value = $"{TotalTimeControlUnit} нс ({(double)TotalTimeControlUnit / TotalTime * 100.0}%)";
+			dgStatistics.Rows[6].Cells[1].Value = $"{TotalTimeProcessUnit} нс ({(double)TotalTimeProcessUnit / TotalTime * 100.0}%)";
+			dgStatistics.Rows[7].Cells[1].Value = $"{TotalTimeUnifUnit} нс ({(double)TotalTimeUnifUnit / TotalTime * 100.0}%)";
 			dgStatistics.Rows[8].Cells[1].Value = $"{LoadProcessExecUnit} ({(double) LoadProcessExecUnit / ExecUnitCount * 100.0}%)";
 			dgStatistics.Rows[9].Cells[1].Value = $"{LoadProcessUnifUnit} ({(double) LoadProcessUnifUnit / UnifUnitCount * 100.0}%)";
 		}
