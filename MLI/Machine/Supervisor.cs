@@ -104,12 +104,18 @@ namespace MLI.Machine
 
 			protected override void Run()
 			{
+				bool flag = true;
 				foreach (ProcessUnit processUnit in processUnits)
 				{
 					if (processQueue.Count <= 0) break;
 					if (processUnit.IsBusy()) continue;
+					flag = false;
 					processUnit.SetBusyFlag(true);
 					processUnit.RunProcess((Process)processQueue.Dequeue());
+				}
+				if (flag && processQueue.Count > 0)
+				{
+					((Process)processQueue.Peek()).SetReadyTime();
 				}
 			}
 		}

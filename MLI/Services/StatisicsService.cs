@@ -6,6 +6,7 @@ namespace MLI.Services
 	public static class StatisticsService
 	{
 		private static List<StatElement> statistics = new List<StatElement>();
+		private static object TotalTimeSync = new object();
 		public static int TotalTime { get; set; }
 		public static int ProcessVCount { get; set; }
 		public static int ProcessNCount { get; set; }
@@ -37,6 +38,8 @@ namespace MLI.Services
 
 		public static void Add(Process process)
 		{
+			DefineProcessCount(process);
+			DefineLoadProcessUnits(process);
 			if (process.GetInfoLevel() > SettingsService.InfoLevel)
 			{
 				return;
@@ -45,21 +48,6 @@ namespace MLI.Services
 			if (element == null)
 			{
 				element = new StatElement().Build(process);
-				switch (element.ProcessKind)
-				{
-					case "V":
-						ProcessVCount++;
-						break;
-					case "N":
-						ProcessNCount++;
-						break;
-					case "M":
-						ProcessMCount++;
-						break;
-					case "U":
-						ProcessUCount++;
-						break;
-				}
 				process.SetStatElement(element);
 				lock (statistics)
 				{
@@ -82,6 +70,50 @@ namespace MLI.Services
 			lock (statistics)
 			{
 				statistics.Sort();
+			}
+		}
+
+		public static void SetTotalTime(int time)
+		{
+			lock (TotalTimeSync)
+			{
+				if (TotalTime < time)
+				{
+					TotalTime = time;
+				}
+			}
+		}
+
+		private static void DefineProcessCount(Process process)
+		{
+			switch (process.GetName())
+			{
+				case "V":
+					ProcessVCount++;
+					break;
+				case "N":
+					ProcessNCount++;
+					break;
+				case "M":
+					ProcessMCount++;
+					break;
+				case "U":
+					ProcessUCount++;
+					break;
+			}
+		}
+
+		private static void DefineLoadProcessUnits(Process process)
+		{
+			int processExecUnitNumber = process.GetExecutions()[process.GetExecutions().Count - 1].ProcessExecUnitNumber;
+			if (processExecUnitNumber > LoadProcessExecUnit)
+			{
+				LoadProcessExecUnit = processExecUnitNumber;
+			}
+			int processUnifUnitNumber = process.GetExecutions()[process.GetExecutions().Count - 1].ProcessUnifUnitNumber;
+			if (processUnifUnitNumber > LoadProcessUnifUnit)
+			{
+				LoadProcessUnifUnit = processUnifUnitNumber;
 			}
 		}
 	}

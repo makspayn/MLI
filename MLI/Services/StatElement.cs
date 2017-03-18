@@ -12,11 +12,15 @@ namespace MLI.Services
 
 		public int ProcessUnifUnitNumber { get; set; }
 
+		public int StartTime { get; set; }
+
 		public int ReadyTime { get; set; }
 
 		public int RunTime { get; set; }
 
 		public int WaitTime { get; set; }
+
+		public int EndTime { get; set; }
 	}
 
 	public class StatElement : IComparable<StatElement>

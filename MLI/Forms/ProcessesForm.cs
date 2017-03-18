@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.Windows.Forms;
 using MLI.Services;
 
@@ -46,17 +46,32 @@ namespace MLI.Forms
 			foreach (StatElement statElement in StatisticsService.GetStatistics())
 			{
 				dgProcesses.Rows.Add(statElement.GetExecutions().Count);
-				dgProcesses.Rows[currentRow].Cells[0].Value = $"Процесс {statElement.ProcessFullName}";
 				foreach (Execution execution in statElement.GetExecutions())
 				{
+					dgProcesses.Rows[currentRow].Cells[0].Value = $"Процесс {statElement.ProcessFullName}";
 					dgProcesses.Rows[currentRow].Cells[1].Value = execution.ProcessUnitName;
 					dgProcesses.Rows[currentRow].Cells[2].Value = $"{execution.WaitTime} нс";
 					dgProcesses.Rows[currentRow].Cells[3].Value = $"{execution.ReadyTime} нс";
 					dgProcesses.Rows[currentRow].Cells[4].Value = $"{execution.RunTime} нс";
+					dgProcesses.Rows[currentRow].Cells[5].Value = $"{execution.StartTime} нс";
+					dgProcesses.Rows[currentRow].Cells[6].Value = $"{execution.EndTime} нс";
 					currentRow++;
 				}
-				
 			}
+			dgProcesses.Sort(dgProcesses.Columns[5], ListSortDirection.Ascending);
+		}
+
+		private void dgProcesses_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+		{
+			e.SortResult = int.Parse(e.CellValue1.ToString().Split(' ')[0]) - int.Parse(e.CellValue2.ToString().Split(' ')[0]);
+
+			if (e.SortResult == 0)
+			{
+				e.SortResult = string.Compare(
+					dgProcesses.Rows[e.RowIndex1].Cells[0].Value.ToString(),
+					dgProcesses.Rows[e.RowIndex2].Cells[0].Value.ToString());
+			}
+			e.Handled = true;
 		}
 	}
 }

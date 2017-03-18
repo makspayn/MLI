@@ -22,6 +22,8 @@ namespace MLI.Method
 		protected string inputData = "";
 		protected string statusData = "";
 		protected string resultData = "";
+		protected int readyTime = -1;
+		protected int startTime;
 		protected int runTime;
 		protected ProcessUnit processUnit;
 		protected StatElement statElement;
@@ -39,6 +41,11 @@ namespace MLI.Method
 
 		public void Run(ProcessUnit processUnit)
 		{
+			startTime = StatisticsService.TotalTime;
+			if (readyTime == -1)
+			{
+				readyTime = 0;
+			}
 			this.processUnit = processUnit;
 			if (!reentry)
 			{
@@ -57,7 +64,19 @@ namespace MLI.Method
 				string processUnitName = processUnit.GetId().Substring(processUnit.GetId().IndexOf('(') + 1).Split(')')[0];
 				execution.ProcessExecUnitNumber = int.Parse(processUnitName.Substring(processUnit.GetId().IndexOf('№') + 1).Split(' ')[0]);
 			}
+			execution.StartTime = startTime;
+			if (executions.Count > 0)
+			{
+				execution.WaitTime = (readyTime != 0 ? readyTime : startTime) - executions[executions.Count - 1].EndTime;
+			}
+			execution.ReadyTime = readyTime != 0 ? startTime - readyTime : 0;
+			runTime = 10; //////////////////////////////
 			execution.RunTime = runTime;
+			execution.EndTime = startTime + runTime;
+			readyTime = -1;
+			startTime = 0;
+			runTime = 0;
+			StatisticsService.SetTotalTime(execution.EndTime);
 			executions.Add(execution);
 		}
 
@@ -133,6 +152,14 @@ namespace MLI.Method
 		public string GetResultData()
 		{
 			return resultData;
+		}
+
+		public void SetReadyTime()
+		{
+			if (readyTime == -1)
+			{
+				readyTime = StatisticsService.TotalTime;
+			}
 		}
 
 		protected void Log(string message)
