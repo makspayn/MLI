@@ -42,7 +42,6 @@ namespace MLI.Method
 			PrintStatus();
 			status = Status.Complete;
 			Log("процесс завершен");
-			
 		}
 
 		protected override void ReRun()

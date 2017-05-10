@@ -50,11 +50,11 @@ namespace MLI.Forms
 				{
 					dgProcesses.Rows[currentRow].Cells[0].Value = $"Процесс {statElement.ProcessFullName}";
 					dgProcesses.Rows[currentRow].Cells[1].Value = execution.ProcessUnitName;
-					dgProcesses.Rows[currentRow].Cells[2].Value = $"{execution.WaitTime} нс";
-					dgProcesses.Rows[currentRow].Cells[3].Value = $"{execution.ReadyTime} нс";
-					dgProcesses.Rows[currentRow].Cells[4].Value = $"{execution.RunTime} нс";
-					dgProcesses.Rows[currentRow].Cells[5].Value = $"{execution.StartTime} нс";
-					dgProcesses.Rows[currentRow].Cells[6].Value = $"{execution.EndTime} нс";
+					dgProcesses.Rows[currentRow].Cells[2].Value = $"{execution.WaitTime * SettingsService.TickLength} нс";
+					dgProcesses.Rows[currentRow].Cells[3].Value = $"{execution.ReadyTime * SettingsService.TickLength} нс";
+					dgProcesses.Rows[currentRow].Cells[4].Value = $"{execution.RunTime * SettingsService.TickLength} нс";
+					dgProcesses.Rows[currentRow].Cells[5].Value = $"{execution.StartTime * SettingsService.TickLength} нс";
+					dgProcesses.Rows[currentRow].Cells[6].Value = $"{execution.EndTime * SettingsService.TickLength} нс";
 					currentRow++;
 				}
 			}

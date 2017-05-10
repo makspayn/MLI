@@ -62,14 +62,14 @@ namespace MLI.Machine
 			execUnits = new List<ProcessUnit>();
 			for (int i = 0; i < execUnitCount; i++)
 			{
-				execUnits.Add(new ExecUnit($"EU №{i + 1}", unifUnitCount));
+				execUnits.Add(new ExecUnit("EU", i + 1, unifUnitCount));
 			}
 		}
 
 		private void BuildControlUnit()
 		{
 			LogService.Debug("Создание блока управления");
-			controlUnit = new ControlUnit("CU №1");
+			controlUnit = new ControlUnit("CU", 1);
 		}
 
 		private void ResolveDependencies()

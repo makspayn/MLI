@@ -8,7 +8,7 @@ namespace MLI.Machine
 		protected Supervisor supervisor;
 		protected Process process;
 
-		protected ProcessUnit(string id) : base(id)
+		protected ProcessUnit(string name, int number) : base(name, number)
 		{
 
 		}

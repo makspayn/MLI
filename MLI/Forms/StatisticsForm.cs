@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using MLI.Services;
 using static MLI.Services.StatisticsService;
 using static MLI.Services.SettingsService;
 
@@ -53,14 +54,14 @@ namespace MLI.Forms
 			dgStatistics.Rows.Add("Загрузка Исполнительных Блоков");
 			dgStatistics.Rows.Add("Загрузка Блоков Унификации");
 
-			dgStatistics.Rows[0].Cells[1].Value = $"{TotalTime} нс";
+			dgStatistics.Rows[0].Cells[1].Value = $"{TotalTime * TickLength} нс";
 			dgStatistics.Rows[1].Cells[1].Value = ProcessVCount;
 			dgStatistics.Rows[2].Cells[1].Value = ProcessNCount;
 			dgStatistics.Rows[3].Cells[1].Value = ProcessMCount;
 			dgStatistics.Rows[4].Cells[1].Value = ProcessUCount;
-			dgStatistics.Rows[5].Cells[1].Value = $"{TotalTimeControlUnit} нс ({(double)TotalTimeControlUnit / TotalTime * 100.0}%)";
-			dgStatistics.Rows[6].Cells[1].Value = $"{TotalTimeProcessUnit} нс ({(double)TotalTimeProcessUnit / TotalTime * 100.0}%)";
-			dgStatistics.Rows[7].Cells[1].Value = $"{TotalTimeUnifUnit} нс ({(double)TotalTimeUnifUnit / TotalTime * 100.0}%)";
+			dgStatistics.Rows[5].Cells[1].Value = $"{TotalTimeControlUnit * TickLength} нс ({(double)TotalTimeControlUnit / TotalTime * 100.0}%)";
+			dgStatistics.Rows[6].Cells[1].Value = $"{TotalTimeProcessUnit * TickLength} нс ({(double)TotalTimeProcessUnit / TotalTime * 100.0}%)";
+			dgStatistics.Rows[7].Cells[1].Value = $"{TotalTimeUnifUnit * TickLength} нс ({(double)TotalTimeUnifUnit / TotalTime * 100.0}%)";
 			dgStatistics.Rows[8].Cells[1].Value = $"{LoadProcessExecUnit} ({(double) LoadProcessExecUnit / ExecUnitCount * 100.0}%)";
 			dgStatistics.Rows[9].Cells[1].Value = $"{LoadProcessUnifUnit} ({(double) LoadProcessUnifUnit / UnifUnitCount * 100.0}%)";
 		}

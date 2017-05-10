@@ -105,7 +105,6 @@ namespace MLI.Services
 
 		private static void SaveXml()
 		{
-
 			CreateXml();
 			LogService.Debug($"Сохранение файла {fileName}");
 			XmlDocument document = new XmlDocument();

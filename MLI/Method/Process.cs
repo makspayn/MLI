@@ -67,13 +67,18 @@ namespace MLI.Method
 		private void FormExecution()
 		{
 			Execution execution = new Execution();
-			execution.ProcessUnitName = processUnit.GetId();
-			execution.ProcessExecUnitNumber = int.Parse(processUnit.GetId().Substring(processUnit.GetId().IndexOf('№') + 1).Split(' ')[0]);
-			if (processUnit.GetId().Contains("("))
+			if (processUnit != null)
 			{
-				execution.ProcessUnifUnitNumber = execution.ProcessExecUnitNumber;
-				string processUnitName = processUnit.GetId().Substring(processUnit.GetId().IndexOf('(') + 1).Split(')')[0];
-				execution.ProcessExecUnitNumber = int.Parse(processUnitName.Substring(processUnit.GetId().IndexOf('№') + 1).Split(' ')[0]);
+				execution.ProcessUnitName = processUnit.GetId();
+				if (processUnit is ExecUnit)
+				{
+					execution.ProcessExecUnitNumber = processUnit.GetNumber();
+				}
+				else
+				{
+					execution.ProcessExecUnitNumber = ((UnifUnit)processUnit).GetParentNumber();
+					execution.ProcessUnifUnitNumber = processUnit.GetNumber();
+				}
 			}
 			execution.WaitTime = readyTime != -1 ? readyTime - endTime : startTime - endTime;
 			execution.ReadyTime = readyTime != -1 ? startTime - readyTime : 0;

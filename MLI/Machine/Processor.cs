@@ -6,14 +6,18 @@ namespace MLI.Machine
 	public abstract class Processor
 	{
 		protected string id;
+		protected string name;
+		protected int number;
 		protected int runTime;
 		private bool busy;
 		private bool complete;
 		private Semaphore semaphore;
 
-		protected Processor(string id)
+		protected Processor(string name, int number)
 		{
-			this.id = id;
+			this.name = name;
+			this.number = number;
+			id = $"{name} №{number}";
 			busy = false;
 			complete = false;
 			semaphore = new Semaphore(0, 1);
@@ -47,6 +51,10 @@ namespace MLI.Machine
 		}
 
 		public string GetId() => id;
+
+		public string GetName() => name;
+
+		public int GetNumber() => number;
 
 		protected abstract void Run();
 

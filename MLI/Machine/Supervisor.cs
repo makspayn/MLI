@@ -19,8 +19,8 @@ namespace MLI.Machine
 			messageQueue = Queue.Synchronized(new Queue());
 			processQueue = Queue.Synchronized(new Queue());
 			frameList = new FrameList();
-			runProcessUnitsBlock = new RunProcessUnitsBlock("RPUB", processQueue);
-			runControlUnitBlock = new RunControlUnitBlock("RCUB", messageQueue);
+			runProcessUnitsBlock = new RunProcessUnitsBlock("RPUB", 1, processQueue);
+			runControlUnitBlock = new RunControlUnitBlock("RCUB", 1, messageQueue);
 		}
 
 		public FrameList GetFrameList()
@@ -79,7 +79,7 @@ namespace MLI.Machine
 			private List<ProcessUnit> processUnits;
 			private Queue processQueue;
 
-			public RunProcessUnitsBlock(string id, Queue processQueue) : base(id)
+			public RunProcessUnitsBlock(string name, int number, Queue processQueue) : base(name, number)
 			{
 				this.processQueue = processQueue;
 			}
@@ -125,7 +125,7 @@ namespace MLI.Machine
 			private ControlUnit controlUnit;
 			private Queue messageQueue;
 
-			public RunControlUnitBlock(string id, Queue messageQueue) : base(id)
+			public RunControlUnitBlock(string name, int number, Queue messageQueue) : base(name, number)
 			{
 				this.messageQueue = messageQueue;
 			}

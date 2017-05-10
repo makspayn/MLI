@@ -12,7 +12,7 @@ namespace MLI.Machine
 		private List<ProcessUnit> unifUnits;
 		private ControlUnifUnit controlUnifUnit;
 
-		public ExecUnit(string id, int unifUnitCount) : base(id)
+		public ExecUnit(string name, int number, int unifUnitCount) : base(name, number)
 		{
 			this.unifUnitCount = unifUnitCount;
 			BuildWorkExecUnitSupervisor();
@@ -31,13 +31,13 @@ namespace MLI.Machine
 			unifUnits = new List<ProcessUnit>();
 			for (int i = 0; i < unifUnitCount; i++)
 			{
-				unifUnits.Add(new UnifUnit($"UU №{i + 1} ({id})"));
+				unifUnits.Add(new UnifUnit("UU", i + 1, this));
 			}
 		}
 
 		private void BuildControlUnifUnit()
 		{
-			controlUnifUnit = new ControlUnifUnit($"CUU №1 ({id})", this);
+			controlUnifUnit = new ControlUnifUnit("CUU", 1, this);
 		}
 
 		private void ResolveDependencies()
@@ -81,27 +81,14 @@ namespace MLI.Machine
 			}
 		}
 
-		private class UnifUnit : ProcessUnit
-		{
-			public UnifUnit(string id) : base(id)
-			{
-
-			}
-
-			protected override void FormMessages(Process process)
-			{
-				supervisor.AddMessage(
-						new Message(process, Message.MessageType.End), this);
-			}
-		}
-
 		private class ControlUnifUnit : ControlUnit
 		{
 			private ExecUnit execUnit;
 
-			public ControlUnifUnit(string id, ExecUnit execUnit) : base(id)
+			public ControlUnifUnit(string name, int number, ExecUnit execUnit) : base(name, number)
 			{
 				this.execUnit = execUnit;
+				id += $" ({execUnit.GetId()})";
 			}
 
 			public void Init(Process process)

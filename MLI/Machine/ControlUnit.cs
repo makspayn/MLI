@@ -10,7 +10,7 @@ namespace MLI.Machine
 		protected FrameList frameList;
 		protected Message message;
 
-		public ControlUnit(string id) : base(id)
+		public ControlUnit(string name, int number) : base(name, number)
 		{
 
 		}
