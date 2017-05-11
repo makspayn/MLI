@@ -36,6 +36,10 @@ namespace MLI.Method
 				(Predicate.Equals(predicate1, predicate2) ? ProcessUStatus.Absolute : 
 				GetUnificator(predicate1.GetArguments(), predicate2.GetArguments())) :
 				ProcessUStatus.Failure;
+			if (processUStatus != ProcessUStatus.Complete)
+			{
+				substitution.Clear();
+			}
 			runTime += processUnit.RunCommand(Command.CreateMessage);
 			runTime += processUnit.RunCommand(Command.AddMessageToQueue);
 			runTime += processUnit.RunCommand(Command.WriteMemory);
@@ -239,6 +243,12 @@ namespace MLI.Method
 			{
 				return string.Join("; ", fromArguments.Select(
 					(t, i) => string.Join("/", t.ToString(), toArguments[i].ToString())).ToList());
+			}
+
+			public void Clear()
+			{
+				fromArguments.Clear();
+				toArguments.Clear();
 			}
 		}
 	}

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<head>
+	<tests>
+		<test>
+			<predicate1>-P(A,x)</predicate1>
+			<predicate2>-P(y,z)</predicate2>
+			<status>Complete</status>
+			<substitution>y/A; x/z</substitution>
+		</test>
+		<test>
+			<predicate1>-P(x,y)</predicate1>
+			<predicate2>-P(w,z)</predicate2>
+			<status>Complete</status>
+			<substitution>x/w; y/z</substitution>
+		</test>
+		<test>
+			<predicate1>-P(A,x)</predicate1>
+			<predicate2>+P(y,z)</predicate2>
+			<status>Failure</status>
+			<substitution></substitution>
+		</test>
+		<test>
+			<predicate1>-O(A,x)</predicate1>
+			<predicate2>-P(y,z)</predicate2>
+			<status>Failure</status>
+			<substitution></substitution>
+		</test>
+		<test>
+			<predicate1>-O(A,x)</predicate1>
+			<predicate2>+P(y,z)</predicate2>
+			<status>Failure</status>
+			<substitution></substitution>
+		</test>
+		<test>
+			<predicate1>-P(A,x)</predicate1>
+			<predicate2>-P(B,z)</predicate2>
+			<status>Failure</status>
+			<substitution></substitution>
+		</test>
+		<test>
+			<predicate1>-P(A,x)</predicate1>
+			<predicate2>-P(A,x)</predicate2>
+			<status>Absolute</status>
+			<substitution></substitution>
+		</test>
+		<test>
+			<predicate1>-P(A,x,B)</predicate1>
+			<predicate2>-P(A,x)</predicate2>
+			<status>Failure</status>
+			<substitution></substitution>
+		</test>
+		<test>
+			<predicate1>-P(A,x,f(z,B))</predicate1>
+			<predicate2>-P(z,C,y)</predicate2>
+			<status>Complete</status>
+			<substitution>z/A; x/C; y/f(A,B)</substitution>
+		</test>
+		<test>
+			<predicate1>-P(A,x,f(z,B))</predicate1>
+			<predicate2>-P(z,C,D)</predicate2>
+			<status>Failure</status>
+			<substitution></substitution>
+		</test>
+		<test>
+			<predicate1>-P(A,x,f(z,B))</predicate1>
+			<predicate2>-P(z,C,g(y))</predicate2>
+			<status>Failure</status>
+			<substitution></substitution>
+		</test>
+		<test>
+			<predicate1>-P(A,x,f(z,B))</predicate1>
+			<predicate2>-P(z,C,g(y,w))</predicate2>
+			<status>Failure</status>
+			<substitution></substitution>
+		</test>
+		<test>
+			<predicate1>-P(A,x,f(z,B))</predicate1>
+			<predicate2>-P(z,C,f(y,w))</predicate2>
+			<status>Complete</status>
+			<substitution>z/A; x/C; y/A; w/B</substitution>
+		</test>
+	</tests>
+</head>
