@@ -66,8 +66,21 @@ namespace MLI.Data
 			return string.Join(separator, disjuncts);
 		}
 
+		public void ValidateFact()
+		{
+			if (GetPredicates().Count > 1)
+			{
+				LogService.Error($"Некорректная секвенция-факт: {this}");
+				throw new Exception($"Некорректная секвенция-факт: {this}");
+			}
+		}
+
 		public static Sequence Minimize(Sequence sequence)
 		{
+			for (int i = 0; i < sequence.GetDisjuncts().Count; i++)
+			{
+				sequence.GetDisjuncts()[i] = Disjunct.Minimize(sequence.GetDisjuncts()[i]);
+			}
 			return sequence;
 		}
 

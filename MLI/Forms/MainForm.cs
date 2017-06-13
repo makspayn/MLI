@@ -188,6 +188,10 @@ namespace MLI.Forms
 				{
 					throw new Exception("Факты отсутствуют!");
 				}
+				foreach (Sequence fact in facts)
+				{
+					fact.ValidateFact();
+				}
 			}
 			catch (Exception exception)
 			{

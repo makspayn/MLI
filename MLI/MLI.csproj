@@ -137,6 +137,7 @@
     <Compile Include="Services\CommandService.cs" />
     <Compile Include="Services\StatisicsService.cs" />
     <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Tests\MinimizeTests.cs" />
     <Compile Include="Tests\ProcessUTests.cs" />
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>

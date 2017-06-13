@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<head>
+	<tests>
+		<test>
+			<sequence1>1 -&gt; -P(A,x) v -O(B,C) &amp; -O(B,C) v +P(y,z)</sequence1>
+			<sequence2>1 -&gt; -P(A,x) v -O(B,C) v +P(y,z)</sequence2>
+		</test>
+	</tests>
+</head>

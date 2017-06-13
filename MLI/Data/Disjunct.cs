@@ -46,5 +46,26 @@ namespace MLI.Data
 		{
 			return new Disjunct(string.Join(separator, disjuncts));
 		}
+
+		public static Disjunct Minimize(Disjunct disjunct)
+		{
+			List<Predicate> predicates = new List<Predicate>();
+			foreach (Predicate predicate in disjunct.GetPredicates())
+			{
+				bool contains = false;
+				foreach (Predicate pred in predicates)
+				{
+					if (Predicate.Equals(pred, predicate))
+					{
+						contains = true;
+					}
+				}
+				if (!contains)
+				{
+					predicates.Add(predicate);
+				}
+			}
+			return new Disjunct(string.Join(separator, predicates));
+		}
 	}
 }
