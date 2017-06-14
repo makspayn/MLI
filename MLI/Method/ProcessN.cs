@@ -118,7 +118,7 @@ namespace MLI.Method
 				fullRests.Add(rest);
 			}
 			runTime += processUnit.RunCommand(Command.MinimizeSequence, fullRests.Sum(rest => rest.GetDisjuncts().Count));
-			rest = Sequence.Minimize(Sequence.Multiply(fullRests));
+			rest = Minimizer.Minimize(Sequence.Multiply(fullRests));
 			return Sequence.GetSequenceState(rest);
 		}
 

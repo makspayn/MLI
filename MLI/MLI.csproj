@@ -65,6 +65,7 @@
     <Compile Include="Data\FrameList.cs" />
     <Compile Include="Data\KnowledgeBase.cs" />
     <Compile Include="Data\Message.cs" />
+    <Compile Include="Data\Minimizer.cs" />
     <Compile Include="Data\Predicate.cs" />
     <Compile Include="Data\Sequence.cs" />
     <Compile Include="Forms\AboutForm.cs">

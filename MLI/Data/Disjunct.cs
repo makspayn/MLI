@@ -6,6 +6,11 @@ namespace MLI.Data
 {
 	public class Disjunct
 	{
+		public enum DisjunctState
+		{
+			Disjunct, Zero
+		}
+
 		private static string separator = " & ";
 		private List<Predicate> predicates;
 
@@ -42,30 +47,42 @@ namespace MLI.Data
 			return predicates;
 		}
 
+		public static DisjunctState GetDisjunctState(Disjunct disjunct)
+		{
+			return disjunct.predicates.Count == 0 ? DisjunctState.Zero : DisjunctState.Disjunct;
+		}
+
 		public static Disjunct Multiply(List<Disjunct> disjuncts)
 		{
 			return new Disjunct(string.Join(separator, disjuncts));
 		}
 
-		public static Disjunct Minimize(Disjunct disjunct)
+		public static bool Contains(Disjunct disjunct, List<Disjunct> disjuncts)
 		{
-			List<Predicate> predicates = new List<Predicate>();
-			foreach (Predicate predicate in disjunct.GetPredicates())
+			foreach (Disjunct disj in disjuncts)
 			{
-				bool contains = false;
-				foreach (Predicate pred in predicates)
+				if (Equals(disj, disjunct))
 				{
-					if (Predicate.Equals(pred, predicate))
-					{
-						contains = true;
-					}
-				}
-				if (!contains)
-				{
-					predicates.Add(predicate);
+					return true;
 				}
 			}
-			return new Disjunct(string.Join(separator, predicates));
+			return false;
+		}
+
+		public static bool ContainsInverse(Disjunct disjunct, List<Disjunct> disjuncts)
+		{
+			if (disjunct.GetPredicates().Count == 1)
+			{
+				foreach (Disjunct disj in disjuncts)
+				{
+					if (disj.GetPredicates().Count == 1 && 
+						Predicate.Equals(Predicate.GetInversPredicate(disjunct.GetPredicates()[0]), disj.GetPredicates()[0]))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 	}
 }

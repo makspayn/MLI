@@ -101,7 +101,7 @@ namespace MLI.Method
 			Sequence sequence =
 				new Sequence($"1 -> {string.Join(" v ", disjunct.GetPredicates().Select(Predicate.GetInversPredicate).ToList())}");
 			runTime += processUnit.RunCommand(Command.MinimizeSequence, sequence.GetDisjuncts().Count);
-			return Sequence.Minimize(sequence);
+			return Minimizer.Minimize(sequence);
 		}
 	}
 }

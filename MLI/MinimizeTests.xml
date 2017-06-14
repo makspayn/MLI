@@ -5,5 +5,25 @@
 			<sequence1>1 -&gt; -P(A,x) v -O(B,C) &amp; -O(B,C) v +P(y,z)</sequence1>
 			<sequence2>1 -&gt; -P(A,x) v -O(B,C) v +P(y,z)</sequence2>
 		</test>
+		<test>
+			<sequence1>1 -&gt; -P(A,x) v -O(B,C) &amp; -O(B,C) &amp; +O(B,C) v +P(y,z)</sequence1>
+			<sequence2>1 -&gt; -P(A,x) v +P(y,z)</sequence2>
+		</test>
+		<test>
+			<sequence1>1 -&gt; -P(A,x) v -O(B,C) &amp; -O(B,C) v +P(y,z) v -O(B,C)</sequence1>
+			<sequence2>1 -&gt; -P(A,x) v -O(B,C) v +P(y,z)</sequence2>
+		</test>
+		<test>
+			<sequence1>1 -&gt; -P(A,x) &amp; -P(B,x) v -O(B,C) &amp; -O(B,C) v +P(A,x) &amp; +P(y,z) v -O(B,C)</sequence1>
+			<sequence2>1 -&gt; -P(A,x) &amp; -P(B,x) v -O(B,C) v +P(A,x) &amp; +P(y,z)</sequence2>
+		</test>
+		<test>
+			<sequence1>1 -&gt; -O(B,C) &amp; -O(B,C) &amp; +O(B,C)</sequence1>
+			<sequence2>1 -&gt; </sequence2>
+		</test>
+		<test>
+			<sequence1>1 -&gt; -O(B,C) &amp; -O(B,C) v +P(A,x) v +O(B,C)</sequence1>
+			<sequence2></sequence2>
+		</test>
 	</tests>
 </head>

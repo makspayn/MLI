@@ -61,5 +61,17 @@ namespace MLI.Data
 		{
 			return new Predicate(predicate.ToString()) {type = !predicate.type};
 		}
+
+		public static bool Contains(Predicate predicate, List<Predicate> predicates)
+		{
+			foreach (Predicate pred in predicates)
+			{
+				if (Equals(pred, predicate))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }

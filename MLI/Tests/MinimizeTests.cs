@@ -43,9 +43,16 @@ namespace MLI.Tests
 			foreach (TestData testData in testsData)
 			{
 				Sequence sequence1 = new Sequence(testData.sequence1);
-				Sequence sequence2 = new Sequence(testData.sequence2);
-				Sequence result = Sequence.Minimize(sequence1);
-				Assert.AreEqual(sequence2.ToString(), result.ToString());
+				Sequence sequence2 = string.IsNullOrEmpty(testData.sequence2) ? null : new Sequence(testData.sequence2);
+				Sequence result = Minimizer.Minimize(sequence1);
+				if (sequence2 == null)
+				{
+					Assert.IsNull(result);
+				}
+				else
+				{
+					Assert.AreEqual(sequence2.ToString(), result.ToString());
+				}
 			}
 		}
 	}

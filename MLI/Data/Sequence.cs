@@ -75,15 +75,6 @@ namespace MLI.Data
 			}
 		}
 
-		public static Sequence Minimize(Sequence sequence)
-		{
-			for (int i = 0; i < sequence.GetDisjuncts().Count; i++)
-			{
-				sequence.GetDisjuncts()[i] = Disjunct.Minimize(sequence.GetDisjuncts()[i]);
-			}
-			return sequence;
-		}
-
 		public static SequenceState GetSequenceState(Sequence sequence)
 		{
 			return sequence == null ? SequenceState.One : 
