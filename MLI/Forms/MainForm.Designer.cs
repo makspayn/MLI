@@ -45,6 +45,7 @@
 			this.menuItemInfo = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
+			this.btnRecommend = new System.Windows.Forms.Button();
 			this.menu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -123,7 +124,7 @@
 			// 
 			// btnClearLog
 			// 
-			this.btnClearLog.Location = new System.Drawing.Point(406, 502);
+			this.btnClearLog.Location = new System.Drawing.Point(517, 502);
 			this.btnClearLog.Name = "btnClearLog";
 			this.btnClearLog.Size = new System.Drawing.Size(75, 23);
 			this.btnClearLog.TabIndex = 8;
@@ -291,11 +292,22 @@
 			this.menuItemAbout.Text = "О программе";
 			this.menuItemAbout.Click += new System.EventHandler(this.menuItemAbout_Click);
 			// 
+			// btnRecommend
+			// 
+			this.btnRecommend.Location = new System.Drawing.Point(406, 502);
+			this.btnRecommend.Name = "btnRecommend";
+			this.btnRecommend.Size = new System.Drawing.Size(93, 23);
+			this.btnRecommend.TabIndex = 11;
+			this.btnRecommend.Text = "Рекомендации";
+			this.btnRecommend.UseVisualStyleBackColor = true;
+			this.btnRecommend.Click += new System.EventHandler(this.btnRecommend_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1008, 537);
+			this.Controls.Add(this.btnRecommend);
 			this.Controls.Add(this.btnClearLog);
 			this.Controls.Add(this.rtbLog);
 			this.Controls.Add(this.rtbConclusions);
@@ -351,6 +363,7 @@
 		private System.Windows.Forms.ToolStripMenuItem menuItemInfo;
 		private System.Windows.Forms.ToolStripMenuItem menuItemHelp;
 		private System.Windows.Forms.ToolStripMenuItem menuItemAbout;
+		private System.Windows.Forms.Button btnRecommend;
 	}
 }
 

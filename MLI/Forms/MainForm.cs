@@ -144,6 +144,25 @@ namespace MLI.Forms
 			AboutForm.ShowForm();
 		}
 
+		private void btnRecommend_Click(object sender, EventArgs e)
+		{
+			List<Sequence> facts;
+			List<Sequence> rules;
+			List<Sequence> conclusions;
+			FillKnowledgeBase();
+			try
+			{
+				PrepareKnowledgeBase(out facts, out rules, out conclusions);
+			}
+			catch (Exception exception)
+			{
+				MessageBox.Show(exception.Message);
+				return;
+			}
+			Tuple<int, int> recommendation = RecommendService.GetRecommendation(facts, rules, conclusions);
+			MessageBox.Show($"Рекомендуется использовать:\n{recommendation.Item1} ИБ\n{recommendation.Item2} БУ");
+		}
+
 		private void btnClearLog_Click(object sender, EventArgs e)
 		{
 			rtbLog.Clear();
@@ -175,9 +194,18 @@ namespace MLI.Forms
 
 		private Machine.Machine CreateMachine()
 		{
-			List<Sequence> facts = new List<Sequence>();
-			List<Sequence> rules = new List<Sequence>();
-			List<Sequence> conclusions = new List<Sequence>();
+			List<Sequence> facts;
+			List<Sequence> rules;
+			List<Sequence> conclusions;
+			PrepareKnowledgeBase(out facts, out rules, out conclusions);
+			return new Machine.Machine(facts, rules, conclusions);
+		}
+
+		private void PrepareKnowledgeBase(out List<Sequence> facts, out List<Sequence> rules, out List<Sequence> conclusions)
+		{
+			facts = new List<Sequence>();
+			rules = new List<Sequence>();
+			conclusions = new List<Sequence>();
 			try
 			{
 				if (KnowledgeBase.Facts.Count != 0)
@@ -230,7 +258,6 @@ namespace MLI.Forms
 				LogService.Error("Создание машины прервано. Ошибка при создании выводимых правил!");
 				throw new Exception($"Ошибка при создании выводимых правил!\n{exception.Message}");
 			}
-			return new Machine.Machine(facts, rules, conclusions);
 		}
 
 		private void SwitchState(bool state)
@@ -240,6 +267,7 @@ namespace MLI.Forms
 			rtbFacts.Enabled = state;
 			rtbRules.Enabled = state;
 			rtbConclusions.Enabled = state;
+			btnRecommend.Enabled = state;
 		}
 	}
 }
