@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using MLI.Forms;
+using MLI.Services;
 
 namespace MLI
 {
@@ -11,6 +12,7 @@ namespace MLI
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			CommandService.InitCommands();
 			Application.Run(MainForm.GetInstance());
 		}
 	}

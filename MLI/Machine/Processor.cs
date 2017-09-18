@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using MLI.Data;
 using MLI.Services;
 
 namespace MLI.Machine
@@ -26,9 +27,9 @@ namespace MLI.Machine
 			LogService.Debug($"{id} создан и запущен");
 		}
 
-		public int RunCommand(Command command, params object[] param)
+		public int RunCommand(CommandId commandId, params object[] param)
 		{
-			int time = CommandService.RunCommand(command, param);
+			int time = CommandService.RunCommand(commandId, param);
 			runTime += time;
 			return time;
 		}

@@ -34,8 +34,8 @@ namespace MLI.Method
 		{
 			Log("процесс запущен");
 			LogService.Info($"[{GetFullName()}]: {inputData}");
-			runTime += processUnit.RunCommand(Command.CreateMessage);
-			runTime += processUnit.RunCommand(Command.AddMessageToQueue);
+			runTime += processUnit.RunCommand(CommandId.CreateMessage);
+			runTime += processUnit.RunCommand(CommandId.AddMessageToQueue);
 			childProcesses.Add(new ProcessV(this, ++childProcessCount, facts, rules, conclusionSequence));
 			status = Status.Progress;
 			reentry = true;
@@ -64,15 +64,15 @@ namespace MLI.Method
 			childProcesses.AddRange(newChildProcesses);
 			if (childProcesses.Count != 0)
 			{
-				runTime += childProcesses.Count * processUnit.RunCommand(Command.CreateMessage);
-				runTime += childProcesses.Count * processUnit.RunCommand(Command.AddMessageToQueue);
+				runTime += childProcesses.Count * processUnit.RunCommand(CommandId.CreateMessage);
+				runTime += childProcesses.Count * processUnit.RunCommand(CommandId.AddMessageToQueue);
 				status = Status.Progress;
 				Log("ожидание завершения дочерних процессов");
 			}
 			else
 			{
-				runTime += processUnit.RunCommand(Command.CreateMessage);
-				runTime += processUnit.RunCommand(Command.AddMessageToQueue);
+				runTime += processUnit.RunCommand(CommandId.CreateMessage);
+				runTime += processUnit.RunCommand(CommandId.AddMessageToQueue);
 				PrintStatus();
 				status = Status.Complete;
 				Log("процесс завершен");
@@ -97,10 +97,10 @@ namespace MLI.Method
 
 		private Sequence GetNewConclusion(Disjunct disjunct)
 		{
-			runTime += processUnit.RunCommand(Command.FormConclusion, 1);
+			runTime += processUnit.RunCommand(CommandId.FormConclusion, 1);
 			Sequence sequence =
 				new Sequence($"1 -> {string.Join(" v ", disjunct.GetPredicates().Select(Predicate.GetInversPredicate).ToList())}");
-			runTime += processUnit.RunCommand(Command.MinimizeSequence, sequence.GetDisjuncts().Count);
+			runTime += processUnit.RunCommand(CommandId.MinimizeSequence, sequence.GetDisjuncts().Count);
 			return Minimizer.Minimize(sequence);
 		}
 	}

@@ -40,16 +40,16 @@ namespace MLI.Method
 
 		protected override void FirstRun()
 		{
-			runTime += (predicates.Count + rulePredicates.Count) * processUnit.RunCommand(Command.ReadMemory);
+			runTime += (predicates.Count + rulePredicates.Count) * processUnit.RunCommand(CommandId.ReadMemory);
 			Log("процесс запущен");
 			Log(inputData);
-			runTime += processUnit.RunCommand(Command.FormPredicatePair, predicates.Count, rulePredicates.Count);
+			runTime += processUnit.RunCommand(CommandId.FormPredicatePair, predicates.Count, rulePredicates.Count);
 			foreach (Predicate predicate in predicates)
 			{
 				foreach (Predicate rulePredicate in rulePredicates)
 				{
-					runTime += processUnit.RunCommand(Command.CreateMessage);
-					runTime += processUnit.RunCommand(Command.AddMessageToQueue);
+					runTime += processUnit.RunCommand(CommandId.CreateMessage);
+					runTime += processUnit.RunCommand(CommandId.AddMessageToQueue);
 					childProcesses.Add(new ProcessU(this, ++childProcessCount, rulePredicate, predicate));
 				}
 			}
@@ -66,7 +66,7 @@ namespace MLI.Method
 			if (restCount > 0)
 			{
 				processMStatus = ProcessMStatus.RestsExist;
-				runTime += processUnit.RunCommand(Command.CreateRestsMatrix, restCount);
+				runTime += processUnit.RunCommand(CommandId.CreateRestsMatrix, restCount);
 				for (int i = 0; i < childProcesses.Count; i++)
 				{
 					if (((ProcessU) childProcesses[i]).GetProcessUStatus() == ProcessU.ProcessUStatus.Complete)
@@ -74,7 +74,7 @@ namespace MLI.Method
 						rests.Add(FormRest(((ProcessU)childProcesses[i]).GetSubstitution(), i % rulePredicates.Count));
 					}
 				}
-				runTime += processUnit.RunCommand(Command.FormRests, rests.Count);
+				runTime += processUnit.RunCommand(CommandId.FormRests, rests.Count);
 				if (rests.Any(rest => rest.GetDisjuncts().Count == 0))
 				{
 					rests.Clear();
@@ -87,9 +87,9 @@ namespace MLI.Method
 					childProcess => childProcess.GetProcessUStatus() == ProcessU.ProcessUStatus.Absolute) ?
 					ProcessMStatus.ZeroRest : ProcessMStatus.OnesMatrix;
 			}
-			runTime += processUnit.RunCommand(Command.CreateMessage);
-			runTime += processUnit.RunCommand(Command.AddMessageToQueue);
-			runTime += rests.Count * processUnit.RunCommand(Command.WriteMemory);
+			runTime += processUnit.RunCommand(CommandId.CreateMessage);
+			runTime += processUnit.RunCommand(CommandId.AddMessageToQueue);
+			runTime += rests.Count * processUnit.RunCommand(CommandId.WriteMemory);
 			childProcesses.Clear();
 			PrintStatus();
 			status = Status.Complete;

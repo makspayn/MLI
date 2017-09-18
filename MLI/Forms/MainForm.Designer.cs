@@ -46,6 +46,8 @@
 			this.menuItemHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnRecommend = new System.Windows.Forms.Button();
+			this.menuItemCommonSettings = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemCommandSettings = new System.Windows.Forms.ToolStripMenuItem();
 			this.menu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -264,10 +266,12 @@
 			// 
 			// menuItemSettings
 			// 
+			this.menuItemSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemCommonSettings,
+            this.menuItemCommandSettings});
 			this.menuItemSettings.Name = "menuItemSettings";
 			this.menuItemSettings.Size = new System.Drawing.Size(79, 20);
 			this.menuItemSettings.Text = "Настройки";
-			this.menuItemSettings.Click += new System.EventHandler(this.menuItemSettings_Click);
 			// 
 			// menuItemInfo
 			// 
@@ -301,6 +305,20 @@
 			this.btnRecommend.Text = "Рекомендации";
 			this.btnRecommend.UseVisualStyleBackColor = true;
 			this.btnRecommend.Click += new System.EventHandler(this.btnRecommend_Click);
+			// 
+			// menuItemCommonSettings
+			// 
+			this.menuItemCommonSettings.Name = "menuItemCommonSettings";
+			this.menuItemCommonSettings.Size = new System.Drawing.Size(178, 22);
+			this.menuItemCommonSettings.Text = "Общие настройки";
+			this.menuItemCommonSettings.Click += new System.EventHandler(this.menuItemCommonSettings_Click);
+			// 
+			// menuItemCommandSettings
+			// 
+			this.menuItemCommandSettings.Name = "menuItemCommandSettings";
+			this.menuItemCommandSettings.Size = new System.Drawing.Size(178, 22);
+			this.menuItemCommandSettings.Text = "Настройки команд";
+			this.menuItemCommandSettings.Click += new System.EventHandler(this.menuItemCommandSettings_Click);
 			// 
 			// MainForm
 			// 
@@ -364,6 +382,8 @@
 		private System.Windows.Forms.ToolStripMenuItem menuItemHelp;
 		private System.Windows.Forms.ToolStripMenuItem menuItemAbout;
 		private System.Windows.Forms.Button btnRecommend;
+		private System.Windows.Forms.ToolStripMenuItem menuItemCommonSettings;
+		private System.Windows.Forms.ToolStripMenuItem menuItemCommandSettings;
 	}
 }
 

@@ -29,7 +29,7 @@ namespace MLI.Method
 
 		protected override void FirstRun()
 		{
-			runTime += 2 * processUnit.RunCommand(Command.ReadMemory);
+			runTime += 2 * processUnit.RunCommand(CommandId.ReadMemory);
 			Log("процесс запущен");
 			Log(inputData);
 			processUStatus = Predicate.CanUnify(predicate1, predicate2) ? 
@@ -40,9 +40,9 @@ namespace MLI.Method
 			{
 				substitution.Clear();
 			}
-			runTime += processUnit.RunCommand(Command.CreateMessage);
-			runTime += processUnit.RunCommand(Command.AddMessageToQueue);
-			runTime += processUnit.RunCommand(Command.WriteMemory);
+			runTime += processUnit.RunCommand(CommandId.CreateMessage);
+			runTime += processUnit.RunCommand(CommandId.AddMessageToQueue);
+			runTime += processUnit.RunCommand(CommandId.WriteMemory);
 			PrintStatus();
 			status = Status.Complete;
 			Log("процесс завершен");
@@ -89,7 +89,7 @@ namespace MLI.Method
 								localStatus = GetUnificatorConstantAndVariable(arguments1[i], arguments2[i]);
 								break;
 							case ArgumentType.Functor:
-								runTime += processUnit.RunCommand(Command.UnificationConstantAndFunctor);
+								runTime += processUnit.RunCommand(CommandId.UnificationConstantAndFunctor);
 								localStatus = ProcessUStatus.Failure;
 								break;
 						}
@@ -112,7 +112,7 @@ namespace MLI.Method
 						switch (arguments2[i].GetArgumentType())
 						{
 							case ArgumentType.Constant:
-								runTime += processUnit.RunCommand(Command.UnificationConstantAndFunctor);
+								runTime += processUnit.RunCommand(CommandId.UnificationConstantAndFunctor);
 								localStatus = ProcessUStatus.Failure;
 								break;
 							case ArgumentType.Variable:
@@ -134,13 +134,13 @@ namespace MLI.Method
 
 		private ProcessUStatus GetUnificatorConstantAndConstant(Argument constant1, Argument constant2)
 		{
-			runTime += processUnit.RunCommand(Command.UnificationConstantAndConstant);
+			runTime += processUnit.RunCommand(CommandId.UnificationConstantAndConstant);
 			return Argument.Equals(constant1, constant2) ? ProcessUStatus.Complete : ProcessUStatus.Failure;
 		}
 
 		private ProcessUStatus GetUnificatorConstantAndVariable(Argument constant, Argument variable)
 		{
-			runTime += processUnit.RunCommand(Command.UnificationConstantAndVariable);
+			runTime += processUnit.RunCommand(CommandId.UnificationConstantAndVariable);
 			substitution.AddSubstitution(variable, constant);
 			DoUnification();
 			return ProcessUStatus.Complete;
@@ -148,7 +148,7 @@ namespace MLI.Method
 
 		private ProcessUStatus GetUnificatorVariableAndVariable(Argument variable1, Argument variable2)
 		{
-			runTime += processUnit.RunCommand(Command.UnificationVariableAndVariable);
+			runTime += processUnit.RunCommand(CommandId.UnificationVariableAndVariable);
 			if (!Argument.Equals(variable1, variable2))
 			{
 				if (Argument.Contains(variable2, substitution.GetToArguments()))
@@ -168,10 +168,10 @@ namespace MLI.Method
 		{
 			if (Argument.Contains(variable, functor.GetArguments()))
 			{
-				runTime += processUnit.RunCommand(Command.UnificationVariableAndFunctor, true);
+				runTime += processUnit.RunCommand(CommandId.UnificationVariableAndFunctor, true);
 				return ProcessUStatus.Failure;
 			}
-			runTime += processUnit.RunCommand(Command.UnificationVariableAndFunctor, false);
+			runTime += processUnit.RunCommand(CommandId.UnificationVariableAndFunctor, false);
 			substitution.AddSubstitution(variable, functor);
 			DoUnification();
 			return ProcessUStatus.Complete;
@@ -179,7 +179,7 @@ namespace MLI.Method
 
 		private ProcessUStatus GetUnificatorFunctorAndFunctor(Argument functor1, Argument functor2)
 		{
-			runTime += processUnit.RunCommand(Command.UnificationFunctorAndFunctor);
+			runTime += processUnit.RunCommand(CommandId.UnificationFunctorAndFunctor);
 			return Argument.CanUnify(functor1, functor2) ? 
 				(Argument.Equals(functor1, functor2) ?
 				ProcessUStatus.Complete : GetUnificator(functor1.GetArguments(), functor2.GetArguments())) :

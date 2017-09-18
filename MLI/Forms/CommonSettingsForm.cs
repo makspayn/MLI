@@ -3,11 +3,11 @@ using MLI.Services;
 
 namespace MLI.Forms
 {
-	public partial class SettingsForm : Form
+	public partial class CommonSettingsForm : Form
 	{
-		private static SettingsForm instance;
+		private static CommonSettingsForm instance;
 
-		private SettingsForm()
+		private CommonSettingsForm()
 		{
 			InitializeComponent();
 		}
@@ -16,13 +16,13 @@ namespace MLI.Forms
 		{
 			if (instance == null)
 			{
-				instance = new SettingsForm();
+				instance = new CommonSettingsForm();
 			}
 			else
 			{
 				if (!instance.Created)
 				{
-					instance = new SettingsForm();
+					instance = new CommonSettingsForm();
 				}
 				else
 				{

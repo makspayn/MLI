@@ -34,8 +34,8 @@ namespace MLI.Method
 		{
 			Log("процесс запущен");
 			Log(inputData);
-			runTime += processUnit.RunCommand(Command.CreateMessage);
-			runTime += processUnit.RunCommand(Command.AddMessageToQueue);
+			runTime += processUnit.RunCommand(CommandId.CreateMessage);
+			runTime += processUnit.RunCommand(CommandId.AddMessageToQueue);
 			childProcesses.Add(new ProcessM(this, ++childProcessCount, ruleSequence, new List<Sequence>() { conclusionSequence }, false));
 			status = Status.Progress;
 			reentry = true;
@@ -46,7 +46,7 @@ namespace MLI.Method
 		{
 			Log("процесс повторно запущен");
 			List<Process> newChildProcesses = new List<Process>();
-			runTime += processUnit.RunCommand(Command.AnalyzeRestsMatrix, childProcesses.Cast<ProcessM>().Sum(childProcess => childProcess.GetRests().Count));
+			runTime += processUnit.RunCommand(CommandId.AnalyzeRestsMatrix, childProcesses.Cast<ProcessM>().Sum(childProcess => childProcess.GetRests().Count));
 			if (childProcesses.Cast<ProcessM>()
 				.All(childProcess => childProcess.GetProcessMStatus() != ProcessM.ProcessMStatus.ZeroRest))
 			{
@@ -59,7 +59,7 @@ namespace MLI.Method
 							processNStatus = ProcessNStatus.NoRest;
 							break;
 						}
-						runTime += processUnit.RunCommand(Command.FormRest, childProcess.GetRests().Count);
+						runTime += processUnit.RunCommand(CommandId.FormRest, childProcess.GetRests().Count);
 						switch (FormRest(childProcess.GetRests()))
 						{
 							case Sequence.SequenceState.Sequence:
@@ -94,16 +94,16 @@ namespace MLI.Method
 			childProcesses.AddRange(newChildProcesses);
 			if (childProcesses.Count != 0)
 			{
-				runTime += childProcesses.Count * processUnit.RunCommand(Command.CreateMessage);
-				runTime += childProcesses.Count * processUnit.RunCommand(Command.AddMessageToQueue);
+				runTime += childProcesses.Count * processUnit.RunCommand(CommandId.CreateMessage);
+				runTime += childProcesses.Count * processUnit.RunCommand(CommandId.AddMessageToQueue);
 				status = Status.Progress;
 				Log("ожидание завершения дочерних процессов");
 			}
 			else
 			{
-				runTime += processUnit.RunCommand(Command.CreateMessage);
-				runTime += processUnit.RunCommand(Command.AddMessageToQueue);
-				runTime += processUnit.RunCommand(Command.WriteMemory);
+				runTime += processUnit.RunCommand(CommandId.CreateMessage);
+				runTime += processUnit.RunCommand(CommandId.AddMessageToQueue);
+				runTime += processUnit.RunCommand(CommandId.WriteMemory);
 				PrintStatus();
 				status = Status.Complete;
 				Log("процесс завершен");
@@ -117,7 +117,7 @@ namespace MLI.Method
 			{
 				fullRests.Add(rest);
 			}
-			runTime += processUnit.RunCommand(Command.MinimizeSequence, fullRests.Sum(rest => rest.GetDisjuncts().Count));
+			runTime += processUnit.RunCommand(CommandId.MinimizeSequence, fullRests.Sum(rest => rest.GetDisjuncts().Count));
 			rest = Minimizer.Minimize(Sequence.Multiply(fullRests));
 			return Sequence.GetSequenceState(rest);
 		}

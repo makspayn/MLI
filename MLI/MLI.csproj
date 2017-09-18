@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Argument.cs" />
+    <Compile Include="Data\Command.cs" />
     <Compile Include="Data\Disjunct.cs" />
     <Compile Include="Data\Frame.cs" />
     <Compile Include="Data\FrameList.cs" />
@@ -73,6 +74,12 @@
     </Compile>
     <Compile Include="Forms\AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CommandSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CommandSettingsForm.Designer.cs">
+      <DependentUpon>CommandSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ExecUnitsForm.cs">
       <SubType>Form</SubType>
@@ -98,11 +105,11 @@
     <Compile Include="Forms\ProcessesForm.Designer.cs">
       <DependentUpon>ProcessesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SettingsForm.cs">
+    <Compile Include="Forms\CommonSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SettingsForm.Designer.cs">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
+    <Compile Include="Forms\CommonSettingsForm.Designer.cs">
+      <DependentUpon>CommonSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\StatisticsForm.cs">
       <SubType>Form</SubType>
@@ -144,6 +151,9 @@
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CommandSettingsForm.resx">
+      <DependentUpon>CommandSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ExecUnitsForm.resx">
       <DependentUpon>ExecUnitsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -156,8 +166,8 @@
     <EmbeddedResource Include="Forms\ProcessesForm.resx">
       <DependentUpon>ProcessesForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\CommonSettingsForm.resx">
+      <DependentUpon>CommonSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StatisticsForm.resx">
       <DependentUpon>StatisticsForm.cs</DependentUpon>

@@ -129,9 +129,14 @@ namespace MLI.Forms
 			StatisticsForm.ShowForm();
 		}
 
-		private void menuItemSettings_Click(object sender, System.EventArgs e)
+		private void menuItemCommonSettings_Click(object sender, EventArgs e)
 		{
-			SettingsForm.ShowForm();
+			CommonSettingsForm.ShowForm();
+		}
+
+		private void menuItemCommandSettings_Click(object sender, EventArgs e)
+		{
+			CommandSettingsForm.ShowForm();
 		}
 
 		private void menuItemHelp_Click(object sender, System.EventArgs e)

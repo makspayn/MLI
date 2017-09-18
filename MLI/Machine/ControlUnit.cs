@@ -33,27 +33,27 @@ namespace MLI.Machine
 			Process parentProcess = message.ParentProcess;
 			if (message.Type == Message.MessageType.Create)
 			{
-				RunCommand(Command.CreateFrame);
-				RunCommand(Command.AddFrameToList);
+				RunCommand(CommandId.CreateFrame);
+				RunCommand(CommandId.AddFrameToList);
 				frameList.AddFrame(new Frame(message));
 				if (parentProcess != null)
 				{
 					frameList.AddChild(parentProcess);
 				}
-				RunCommand(Command.DeleteMessageFromQueue);
-				RunCommand(Command.CreateProcess);
+				RunCommand(CommandId.DeleteMessageFromQueue);
+				RunCommand(CommandId.CreateProcess);
 				supervisor.AddProcess(process, this);
 			}
 			else
 			{
 				frameList.DeleteFrame(process);
-				RunCommand(Command.DeleteFrameFromList);
+				RunCommand(CommandId.DeleteFrameFromList);
 				if (parentProcess != null)
 				{
-					RunCommand(Command.DeleteMessageFromQueue);
+					RunCommand(CommandId.DeleteMessageFromQueue);
 					if (frameList.DeleteChild(parentProcess))
 					{
-						RunCommand(Command.CreateProcess);
+						RunCommand(CommandId.CreateProcess);
 						supervisor.AddProcess(parentProcess, this);
 					}
 					else

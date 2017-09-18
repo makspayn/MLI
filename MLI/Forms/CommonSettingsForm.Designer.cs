@@ -1,6 +1,6 @@
 ﻿namespace MLI.Forms
 {
-	partial class SettingsForm
+	partial class CommonSettingsForm
 	{
 		private System.ComponentModel.IContainer components = null;
 
@@ -199,7 +199,7 @@
 			this.btnSave.UseVisualStyleBackColor = true;
 			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
 			// 
-			// SettingForm
+			// CommonSettingsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -215,9 +215,9 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "SettingForm";
+			this.Name = "CommonSettingsForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Настройки";
+			this.Text = "Общие настройки";
 			this.Load += new System.EventHandler(this.SettingsForm_Load);
 			((System.ComponentModel.ISupportInitialize)(this.numExecUnitCount)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numUnifUnitCount)).EndInit();
