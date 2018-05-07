@@ -1,4 +1,5 @@
 ﻿using MLI.Data;
+using MLI.Machine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Xml;

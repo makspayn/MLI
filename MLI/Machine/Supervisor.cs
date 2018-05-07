@@ -11,6 +11,7 @@ namespace MLI.Machine
 		private Queue messageQueue;
 		private Queue processQueue;
 		private FrameList frameList;
+		private ReconfigurationUnit reconfigurationUnit;
 		private RunProcessUnitsBlock runProcessUnitsBlock;
 		private RunControlUnitBlock runControlUnitBlock;
 
@@ -19,13 +20,19 @@ namespace MLI.Machine
 			messageQueue = Queue.Synchronized(new Queue());
 			processQueue = Queue.Synchronized(new Queue());
 			frameList = new FrameList();
-			runProcessUnitsBlock = new RunProcessUnitsBlock("RPUB", 1, processQueue);
+			runProcessUnitsBlock = new RunProcessUnitsBlock("RPUB", 1, processQueue, this);
 			runControlUnitBlock = new RunControlUnitBlock("RCUB", 1, messageQueue);
 		}
 
 		public FrameList GetFrameList()
 		{
 			return frameList;
+		}
+		
+		public void SetReconfigurationUnit(ReconfigurationUnit reconfigurationUnit)
+		{
+			this.reconfigurationUnit = reconfigurationUnit;
+			runProcessUnitsBlock.SetReconfigurationUnit(reconfigurationUnit);
 		}
 
 		public void SetProcessUnits(List<ProcessUnit> processUnits)
@@ -45,7 +52,11 @@ namespace MLI.Machine
 
 		public void AddMessages(List<Message> messages, ProcessUnit processUnit)
 		{
-			processUnit.SetBusyFlag(false);
+			if (processUnit != null)
+			{
+				processUnit.SetBusyFlag(false);
+				reconfigurationUnit.ReturnResource(processUnit);
+			}
 			foreach (Message message in messages)
 			{
 				messageQueue.Enqueue(message);
@@ -77,16 +88,24 @@ namespace MLI.Machine
 		private class RunProcessUnitsBlock : Processor
 		{
 			private List<ProcessUnit> processUnits;
+			private ReconfigurationUnit reconfigurationUnit;
 			private Queue processQueue;
+			private Supervisor supervisor;
 
-			public RunProcessUnitsBlock(string name, int number, Queue processQueue) : base(name, number)
+			public RunProcessUnitsBlock(string name, int number, Queue processQueue, Supervisor supervisor) : base(name, number)
 			{
 				this.processQueue = processQueue;
+				this.supervisor = supervisor;
 			}
 
 			public void SetProcessUnits(List<ProcessUnit> processUnits)
 			{
 				this.processUnits = processUnits;
+			}
+			
+			public void SetReconfigurationUnit(ReconfigurationUnit reconfigurationUnit)
+			{
+				this.reconfigurationUnit = reconfigurationUnit;
 			}
 
 			public void RunProcessUnits()
@@ -108,9 +127,10 @@ namespace MLI.Machine
 				foreach (ProcessUnit processUnit in processUnits)
 				{
 					if (processQueue.Count <= 0) break;
-					if (processUnit.IsBusy()) continue;
+					if (!reconfigurationUnit.CanGetResource(processUnit)) continue;
 					flag = false;
 					processUnit.SetBusyFlag(true);
+					processUnit.SetSupervisor(supervisor);
 					processUnit.RunProcess((Process)processQueue.Dequeue());
 				}
 				if (flag && processQueue.Count > 0)

@@ -12,26 +12,28 @@ namespace MLI.Machine
 	public class Machine
 	{
 		private static Machine instance;
-		private int execUnitCount;
-		private int unifUnitCount;
+		private int unitResourceCount;
+		private int execUnitWeight;
 		private KnowledgeBase knowledgeBase;
 		private Supervisor workMachineSupervisor;
-		private List<ProcessUnit> execUnits;
+		private List<ProcessUnit> execUnits = new List<ProcessUnit>();
+		private List<ProcessUnit> unifUnits = new List<ProcessUnit>();
 		private ControlUnit controlUnit;
+		private ReconfigurationUnit reconfigurationUnit;
 		private Stopwatch machineWatch;
 
 		public Machine(List<Sequence> facts, List<Sequence> rules, List<Sequence> conclusions)
 		{
-			execUnitCount = SettingsService.ExecUnitCount;
-			unifUnitCount = SettingsService.UnifUnitCount;
+			unitResourceCount = SettingsService.UnitResourceCount;
+			execUnitWeight = SettingsService.ExecUnitWeight;
 			machineWatch = new Stopwatch();
 			BuildKnowledgeBase(facts, rules, conclusions);
 			BuildWorkMachineSupervisor();
-			BuildExecUnits();
 			BuildControlUnit();
+			BuildReconfigurationUnit();
 			ResolveDependencies();
 			instance = this;
-			LogService.Info($"Создана машина {execUnitCount}x{unifUnitCount}");
+			LogService.Info($"Создана машина с количеством ресурсов: {unitResourceCount}");
 		}
 
 		public static Machine GetInstance()
@@ -55,21 +57,27 @@ namespace MLI.Machine
 			LogService.Debug("Создание диспетчера работы машины");
 			workMachineSupervisor = new Supervisor();
 		}
-
-		private void BuildExecUnits()
-		{
-			LogService.Debug("Создание исполнительных блоков");
-			execUnits = new List<ProcessUnit>();
-			for (int i = 0; i < execUnitCount; i++)
-			{
-				execUnits.Add(new ExecUnit("EU", i + 1, unifUnitCount));
-			}
-		}
-
+		
 		private void BuildControlUnit()
 		{
 			LogService.Debug("Создание блока управления");
 			controlUnit = new ControlUnit("CU", 1);
+		}
+
+		private void BuildReconfigurationUnit()
+		{
+			LogService.Debug("Создание блока реконфигурации и вычислительных ресурсов");
+			reconfigurationUnit = new ReconfigurationUnit(unitResourceCount, execUnitWeight);
+			int maxExecUnitCount = unitResourceCount / execUnitWeight;
+			int maxUnifUnitCount = maxExecUnitCount * execUnitWeight;
+			for (int i = 0; i < maxUnifUnitCount; i++)
+			{
+				unifUnits.Add(new UnifUnit("UU", i + 1));
+			}
+			for (int i = 0; i < maxExecUnitCount; i++)
+			{
+				execUnits.Add(new ExecUnit("EU", i + 1, reconfigurationUnit, unifUnits));
+			}
 		}
 
 		private void ResolveDependencies()
@@ -77,10 +85,7 @@ namespace MLI.Machine
 			LogService.Debug("Разрешение зависимостей");
 			workMachineSupervisor.SetProcessUnits(execUnits);
 			workMachineSupervisor.SetControlUnit(controlUnit);
-			foreach (ProcessUnit execUnit in execUnits)
-			{
-				execUnit.SetSupervisor(workMachineSupervisor);
-			}
+			workMachineSupervisor.SetReconfigurationUnit(reconfigurationUnit);
 			controlUnit.SetSupervisor(workMachineSupervisor);
 		}
 
@@ -90,8 +95,7 @@ namespace MLI.Machine
 			machineWatch.Start();
 			LogService.Info("Машина запущена");
 			Process mainProcess = new MainProcess(null, 0, knowledgeBase.facts, knowledgeBase.rules, knowledgeBase.conclusions[0]);
-			workMachineSupervisor.AddMessage(
-				new Message(mainProcess, Message.MessageType.Create), execUnits[0]);
+			workMachineSupervisor.AddMessage(new Message(mainProcess, Message.MessageType.Create), null);
 		}
 
 		public void Stop()

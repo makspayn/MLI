@@ -35,8 +35,7 @@ namespace MLI.Forms
 
 		private void SettingsForm_Load(object sender, System.EventArgs e)
 		{
-			numExecUnitCount.Value = SettingsService.ExecUnitCount;
-			numUnifUnitCount.Value = SettingsService.UnifUnitCount;
+			numUnitResourceCount.Value = SettingsService.UnitResourceCount;
 			numTickLength.Value = SettingsService.TickLength;
 			switch (SettingsService.InfoLevel)
 			{
@@ -57,18 +56,16 @@ namespace MLI.Forms
 
 		private void btnSave_Click(object sender, System.EventArgs e)
 		{
-			SettingsService.ExecUnitCount = (int)numExecUnitCount.Value;
-			SettingsService.UnifUnitCount = (int)numUnifUnitCount.Value;
+			SettingsService.UnitResourceCount = (int)numUnitResourceCount.Value;
 			SettingsService.TickLength = (int)numTickLength.Value;
 			if (rbV.Checked) SettingsService.InfoLevel = LogService.InfoLevel.ProcessV;
 			if (rbN.Checked) SettingsService.InfoLevel = LogService.InfoLevel.ProcessN;
 			if (rbM.Checked) SettingsService.InfoLevel = LogService.InfoLevel.ProcessM;
 			if (rbU.Checked) SettingsService.InfoLevel = LogService.InfoLevel.ProcessU;
 			LogService.Info("Установлены новые настройки:\n" +
-				$"Число исполнительных блоков: {SettingsService.ExecUnitCount}\n" +
-				$"Число блоков унификации: {SettingsService.UnifUnitCount}\n" +
-				$"Длина такта (нс): {SettingsService.TickLength}\n" +
-				$"Уровень сбора информации: {SettingsService.InfoLevel}");
+			                $"Количество ресурсов: {SettingsService.UnitResourceCount}\n" +
+			                $"Длина такта (нс): {SettingsService.TickLength}\n" +
+			                $"Уровень сбора информации: {SettingsService.InfoLevel}");
 		}
 	}
 }

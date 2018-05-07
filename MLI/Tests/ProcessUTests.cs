@@ -49,7 +49,7 @@ namespace MLI.Tests
 			foreach (TestData testData in testsData)
 			{
 				ProcessU processU = new ProcessU(null, 0, new Predicate(testData.predicate1), new Predicate(testData.predicate2));
-				processU.Run(new ExecUnit("UU", 1, 1));
+				processU.Run(new ExecUnit("EU", 1, new ReconfigurationUnit(1024, 8), new List<ProcessUnit>{new UnifUnit("UU", 1)}));
 				Assert.AreEqual(testData.status, processU.GetProcessUStatus().ToString());
 				Assert.AreEqual(testData.substitution, processU.GetSubstitution().GetSubstitutions());
 			}

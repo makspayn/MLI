@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using MLI.Data;
 
-namespace MLI.Data
+namespace MLI.Machine
 {
 	public class Minimizer
 	{

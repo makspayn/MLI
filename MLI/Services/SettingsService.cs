@@ -2,9 +2,9 @@
 {
 	public static class SettingsService
 	{
-		public static int ExecUnitCount { get; set; } = 1;
-
-		public static int UnifUnitCount { get; set; } = 1;
+		public static int UnitResourceCount { get; set; } = 9;
+		
+		public static int ExecUnitWeight { get; set; } = 8;
 
 		public static int TickLength { get; set; } = 10;
 

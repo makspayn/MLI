@@ -41,7 +41,7 @@
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(330, 24);
 			this.label2.TabIndex = 1;
-			this.label2.Text = "Разработчик: Альгин М.Н., ИВТм-11";
+			this.label2.Text = "Разработчик: Альгин М.Н., ИВТм-21";
 			// 
 			// label3
 			// 
@@ -51,7 +51,7 @@
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(144, 20);
 			this.label3.TabIndex = 2;
-			this.label3.Text = "Версия: 20170615";
+			this.label3.Text = "Версия: 20171226";
 			// 
 			// AboutForm
 			// 

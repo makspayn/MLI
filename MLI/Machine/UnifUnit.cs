@@ -7,16 +7,15 @@ namespace MLI.Machine
 	{
 		private int parentNumber;
 
-		public UnifUnit(string name, int number, ProcessUnit parent) : base(name, number)
+		public UnifUnit(string name, int number) : base(name, number)
 		{
-			id += $" ({parent.GetId()})";
-			parentNumber = parent.GetNumber();
+			//id += $" ({parent.GetId()})";
+			//parentNumber = parent.GetNumber();
 		}
 
 		protected override void FormMessages(Process process)
 		{
-			supervisor.AddMessage(
-					new Message(process, Message.MessageType.End), this);
+			supervisor.AddMessage(new Message(process, Message.MessageType.End), this);
 		}
 
 		public int GetParentNumber() => parentNumber;

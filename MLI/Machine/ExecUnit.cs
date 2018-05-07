@@ -7,16 +7,16 @@ namespace MLI.Machine
 {
 	public class ExecUnit : ProcessUnit
 	{
-		private int unifUnitCount;
 		private Supervisor workExecUnitSupervisor;
 		private List<ProcessUnit> unifUnits;
 		private ControlUnifUnit controlUnifUnit;
+		private ReconfigurationUnit reconfigurationUnit;
 
-		public ExecUnit(string name, int number, int unifUnitCount) : base(name, number)
+		public ExecUnit(string name, int number, ReconfigurationUnit reconfigurationUnit, List<ProcessUnit> unifUnits) : base(name, number)
 		{
-			this.unifUnitCount = unifUnitCount;
+			this.reconfigurationUnit = reconfigurationUnit;
+			this.unifUnits = unifUnits;
 			BuildWorkExecUnitSupervisor();
-			BuildUnifUnits();
 			BuildControlUnifUnit();
 			ResolveDependencies();
 		}
@@ -24,15 +24,6 @@ namespace MLI.Machine
 		private void BuildWorkExecUnitSupervisor()
 		{
 			workExecUnitSupervisor = new Supervisor();
-		}
-
-		private void BuildUnifUnits()
-		{
-			unifUnits = new List<ProcessUnit>();
-			for (int i = 0; i < unifUnitCount; i++)
-			{
-				unifUnits.Add(new UnifUnit("UU", i + 1, this));
-			}
 		}
 
 		private void BuildControlUnifUnit()
@@ -44,10 +35,7 @@ namespace MLI.Machine
 		{
 			workExecUnitSupervisor.SetProcessUnits(unifUnits);
 			workExecUnitSupervisor.SetControlUnit(controlUnifUnit);
-			foreach (ProcessUnit unifUnit in unifUnits)
-			{
-				unifUnit.SetSupervisor(workExecUnitSupervisor);
-			}
+			workExecUnitSupervisor.SetReconfigurationUnit(reconfigurationUnit);
 			controlUnifUnit.SetSupervisor(workExecUnitSupervisor);
 		}
 
@@ -67,7 +55,7 @@ namespace MLI.Machine
 				if (childProcesses[0] is ProcessU)
 				{
 					controlUnifUnit.Init(process);
-					workExecUnitSupervisor.AddMessages(messages, unifUnits[0]);
+					workExecUnitSupervisor.AddMessages(messages, null);
 				}
 				else
 				{
@@ -76,8 +64,7 @@ namespace MLI.Machine
 			}
 			else
 			{
-				supervisor.AddMessage(
-					new Message(process, Message.MessageType.End), this);
+				supervisor.AddMessage(new Message(process, Message.MessageType.End), this);
 			}
 		}
 

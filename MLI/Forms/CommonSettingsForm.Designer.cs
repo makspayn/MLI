@@ -18,9 +18,7 @@
 		private void InitializeComponent()
 		{
 			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.numExecUnitCount = new System.Windows.Forms.NumericUpDown();
-			this.numUnifUnitCount = new System.Windows.Forms.NumericUpDown();
+			this.numUnitResourceCount = new System.Windows.Forms.NumericUpDown();
 			this.label3 = new System.Windows.Forms.Label();
 			this.numTickLength = new System.Windows.Forms.NumericUpDown();
 			this.gbInfoLevel = new System.Windows.Forms.GroupBox();
@@ -29,8 +27,7 @@
 			this.rbN = new System.Windows.Forms.RadioButton();
 			this.rbV = new System.Windows.Forms.RadioButton();
 			this.btnSave = new System.Windows.Forms.Button();
-			((System.ComponentModel.ISupportInitialize)(this.numExecUnitCount)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numUnifUnitCount)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numUnitResourceCount)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numTickLength)).BeginInit();
 			this.gbInfoLevel.SuspendLayout();
 			this.SuspendLayout();
@@ -43,57 +40,25 @@
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(250, 20);
 			this.label1.TabIndex = 0;
-			this.label1.Text = "Число исполнительных блоков:";
+			this.label1.Text = "Количество ресурсов:";
 			// 
-			// label2
+			// numUnitResourceCount
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label2.Location = new System.Drawing.Point(12, 39);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(216, 20);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "Число блоков унификации:";
-			// 
-			// numExecUnitCount
-			// 
-			this.numExecUnitCount.Location = new System.Drawing.Point(268, 9);
-			this.numExecUnitCount.Maximum = new decimal(new int[] {
+			this.numUnitResourceCount.Location = new System.Drawing.Point(268, 9);
+			this.numUnitResourceCount.Maximum = new decimal(new int[] {
             1024,
             0,
             0,
             0});
-			this.numExecUnitCount.Minimum = new decimal(new int[] {
-            1,
+			this.numUnitResourceCount.Minimum = new decimal(new int[] {
+            9,
             0,
             0,
             0});
-			this.numExecUnitCount.Name = "numExecUnitCount";
-			this.numExecUnitCount.Size = new System.Drawing.Size(50, 20);
-			this.numExecUnitCount.TabIndex = 2;
-			this.numExecUnitCount.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			// 
-			// numUnifUnitCount
-			// 
-			this.numUnifUnitCount.Location = new System.Drawing.Point(268, 39);
-			this.numUnifUnitCount.Maximum = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
-			this.numUnifUnitCount.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.numUnifUnitCount.Name = "numUnifUnitCount";
-			this.numUnifUnitCount.Size = new System.Drawing.Size(50, 20);
-			this.numUnifUnitCount.TabIndex = 3;
-			this.numUnifUnitCount.Value = new decimal(new int[] {
+			this.numUnitResourceCount.Name = "numExecUnitCount";
+			this.numUnitResourceCount.Size = new System.Drawing.Size(50, 20);
+			this.numUnitResourceCount.TabIndex = 2;
+			this.numUnitResourceCount.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -103,7 +68,7 @@
 			// 
 			this.label3.AutoSize = true;
 			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label3.Location = new System.Drawing.Point(12, 69);
+			this.label3.Location = new System.Drawing.Point(12, 39);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(141, 20);
 			this.label3.TabIndex = 4;
@@ -111,7 +76,7 @@
 			// 
 			// numTickLength
 			// 
-			this.numTickLength.Location = new System.Drawing.Point(268, 69);
+			this.numTickLength.Location = new System.Drawing.Point(268, 39);
 			this.numTickLength.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -138,7 +103,7 @@
 			this.gbInfoLevel.Controls.Add(this.rbN);
 			this.gbInfoLevel.Controls.Add(this.rbV);
 			this.gbInfoLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.gbInfoLevel.Location = new System.Drawing.Point(16, 99);
+			this.gbInfoLevel.Location = new System.Drawing.Point(16, 69);
 			this.gbInfoLevel.Name = "gbInfoLevel";
 			this.gbInfoLevel.Size = new System.Drawing.Size(302, 137);
 			this.gbInfoLevel.TabIndex = 6;
@@ -208,9 +173,7 @@
 			this.Controls.Add(this.gbInfoLevel);
 			this.Controls.Add(this.numTickLength);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.numUnifUnitCount);
-			this.Controls.Add(this.numExecUnitCount);
-			this.Controls.Add(this.label2);
+			this.Controls.Add(this.numUnitResourceCount);
 			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -219,8 +182,7 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Общие настройки";
 			this.Load += new System.EventHandler(this.SettingsForm_Load);
-			((System.ComponentModel.ISupportInitialize)(this.numExecUnitCount)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numUnifUnitCount)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numUnitResourceCount)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numTickLength)).EndInit();
 			this.gbInfoLevel.ResumeLayout(false);
 			this.gbInfoLevel.PerformLayout();
@@ -232,9 +194,7 @@
 		#endregion
 
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.NumericUpDown numExecUnitCount;
-		private System.Windows.Forms.NumericUpDown numUnifUnitCount;
+		private System.Windows.Forms.NumericUpDown numUnitResourceCount;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.NumericUpDown numTickLength;
 		private System.Windows.Forms.GroupBox gbInfoLevel;

@@ -51,8 +51,6 @@ namespace MLI.Forms
 			dgStatistics.Rows.Add("Время работы Блока Управления");
 			dgStatistics.Rows.Add("Время работы Операционного Модуля");
 			dgStatistics.Rows.Add("Время работы Модуля Унификации");
-			dgStatistics.Rows.Add("Загрузка Исполнительных Блоков");
-			dgStatistics.Rows.Add("Загрузка Блоков Унификации");
 
 			dgStatistics.Rows[0].Cells[1].Value = $"{TotalTime * TickLength} нс";
 			dgStatistics.Rows[1].Cells[1].Value = ProcessVCount;
@@ -62,8 +60,6 @@ namespace MLI.Forms
 			dgStatistics.Rows[5].Cells[1].Value = $"{TotalTimeControlUnit * TickLength} нс ({(double)TotalTimeControlUnit / TotalTime * 100.0}%)";
 			dgStatistics.Rows[6].Cells[1].Value = $"{TotalTimeProcessUnit * TickLength} нс ({(double)TotalTimeProcessUnit / TotalTime * 100.0}%)";
 			dgStatistics.Rows[7].Cells[1].Value = $"{TotalTimeUnifUnit * TickLength} нс ({(double)TotalTimeUnifUnit / TotalTime * 100.0}%)";
-			dgStatistics.Rows[8].Cells[1].Value = $"{LoadProcessExecUnit} ({(double) LoadProcessExecUnit / ExecUnitCount * 100.0}%)";
-			dgStatistics.Rows[9].Cells[1].Value = $"{LoadProcessUnifUnit} ({(double) LoadProcessUnifUnit / UnifUnitCount * 100.0}%)";
 		}
 	}
 }
